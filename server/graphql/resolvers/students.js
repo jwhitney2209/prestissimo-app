@@ -67,7 +67,7 @@ module.exports = {
         const studentUserId = student.userId.toHexString();
         if (user.id === studentUserId) {
           await student.deleteOne();
-          return 'Student deleted successfully';
+          return `Student ${student.firstName} ${student.lastName} deleted successfully`;
         } else {
           throw new AuthenticationError("Action not allowed");
         }
