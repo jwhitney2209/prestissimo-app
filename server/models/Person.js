@@ -1,10 +1,15 @@
 const mongoose = require("mongoose");
 
-const studentSchema = new mongoose.Schema({
+const personSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
+  },
+  role: {
+    type: String,
+    required: true,
+    enum: ["Student", "Teacher", "Parent", "Volunteer"]
   },
   firstName: {
     type: String,
@@ -16,23 +21,14 @@ const studentSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  schoolId: {
-    type: String,
-    trim: true,
-  },
   email: {
     type: String,
   },
   phone: {
     type: String,
   },
-  age: {
-    type: String,
-    trim: true,
-  },
   grade: {
     type: String,
-    required: true,
     enum: ["K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
   },
   createdAt: {
@@ -40,6 +36,6 @@ const studentSchema = new mongoose.Schema({
   }
 });
 
-const Student = mongoose.model("Student", studentSchema);
+const Person = mongoose.model("Person", personSchema);
 
-module.exports = Student;
+module.exports = Person;

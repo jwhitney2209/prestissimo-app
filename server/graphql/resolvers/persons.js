@@ -1,23 +1,23 @@
 const { AuthenticationError } = require("apollo-server");
 
-const Student = require("../../models/Student");
+const Person = require("../../models/Person");
 const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
   Query: {
-    async getStudents() {
+    async getPersons() {
       try {
-        const students = await Student.find().sort({ createdAt: -1 });
-        return students;
+        const persons = await Person.find().sort({ createdAt: -1 });
+        return persons;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async getStudent(_, { studentId }) {
+    async getPerson(_, { personId }) {
       try {
-        const student = await Student.findById(studentId);
-        if (student) {
-          return student;
+        const person = await Person.findById(personId);
+        if (person) {
+          return person;
         } else {
           throw new Error("Student not found");
         }
@@ -27,47 +27,45 @@ module.exports = {
     },
   },
   Mutation: {
-    async createStudent(
+    async createPerson(
       _,
       {
-        studentInput: {
+        personInput: {
+          role,
           firstName,
           lastName,
-          schoolId,
           email,
           phone,
-          age,
           grade,
         },
       },
       context
     ) {
       const user = checkAuth(context);
-      const newStudent = new Student({
+      const newPerson = new Person({
+        role,
         firstName,
         lastName,
-        schoolId,
         email,
         phone,
-        age,
         grade,
         userId: user.id,
         createdAt: new Date().toISOString(),
       });
 
-      const student = await newStudent.save();
+      const person = await newPerson.save();
 
-      return student;
+      return person;
     },
-    async deleteStudent(_, { studentId }, context) {
+    async deletePerson(_, { personId }, context) {
       const user = checkAuth(context);
 
       try {
-        const student = await Student.findById(studentId);
-        const studentUserId = student.userId.toHexString();
-        if (user.id === studentUserId) {
-          await student.deleteOne();
-          return `Student ${student.firstName} ${student.lastName} deleted successfully`;
+        const person = await Person.findById(personId);
+        const personUserId = person.userId.toHexString();
+        if (user.id === personUserId) {
+          await person.deleteOne();
+          return `${person.firstName} ${person.lastName} deleted successfully`;
         } else {
           throw new AuthenticationError("Action not allowed");
         }

@@ -1,16 +1,24 @@
 const { gql } = require("apollo-server");
 
 module.exports = gql`
-  type Student{
+  type Person{
     id: ID!
+    role: String!
     firstName: String!
     lastName: String!
     createdAt: String!
-    schoolId: String
     email: String
     phone: String
-    age: String
-    grade: String!
+    grade: String
+    userId: String
+  }
+
+  type Inventory {
+    id: ID!
+    name: String!
+    size: String
+    quantity: Int!
+    createdAt: String!
     userId: String
   }
 
@@ -44,27 +52,36 @@ module.exports = gql`
     zip: String!
   }
 
-  input StudentInput {
+  input PersonInput {
+    role: String!
     firstName: String!
     lastName: String!
-    schoolId: String
     email: String
     phone: String
-    age: String
-    grade: String!
+    grade: String
+  }
+
+  input ItemInput {
+    name: String!
+    size: String
+    quantity: Int!
   }
 
   type Query {
     getUsers: [User]
-    getUser(userId: ID!): User
-    getStudents: [Student]
-    getStudent(studentId: ID!): Student!
+    getUser(userId: ID!): User!
+    getPersons: [Person]
+    getPerson(personId: ID!): Person!
+    getItems: [Inventory]
+    getItem(itemId: ID!): Inventory!
   }
 
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
-    createStudent(studentInput: StudentInput): Student!
-    deleteStudent(studentId: ID!): ID!
+    createPerson(personInput: PersonInput): Person!
+    deletePerson(personId: ID!): ID!
+    createItem(itemInput: ItemInput): Inventory!
+    deleteItem(itemId: ID!): ID!
   }
 `;
