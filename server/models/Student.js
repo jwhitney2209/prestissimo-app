@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const studentSchema = new mongoose.Schema({
-  createdBy: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -16,20 +16,18 @@ const studentSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  studentId: {
+  schoolId: {
     type: String,
     trim: true,
   },
   email: {
     type: String,
-    match: [/.+@.+\..+/, "Must match an email address!"],
   },
   phone: {
     type: String,
-    match: [/^\d{3}-\d{3}-\d{4}$/, "Must match a phone number! ex. 123-456-7890"],
   },
   age: {
-    type: Number,
+    type: String,
     trim: true,
   },
   grade: {
@@ -37,13 +35,8 @@ const studentSchema = new mongoose.Schema({
     required: true,
     enum: ["K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
   },
-  ensemble: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Ensemble",
-  },
-  section: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Section",
+  createdAt: {
+    type: String,
   }
 });
 

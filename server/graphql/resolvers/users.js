@@ -31,7 +31,7 @@ module.exports = {
   Mutation: {
     async login(_, { email, password }) {
       const { errors, valid } = validateLoginInput(email, password);
-      const user = await User.findOne({ email});
+      const user = await User.findOne({email});
       if(!user) {
         errors.general = "Email not found";
         throw new UserInputError("Email not found", { errors });
