@@ -5,9 +5,10 @@ const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
   Query: {
-    async getPersons() {
+    async getPersons(_, args, context) {
+      const user = checkAuth(context);
       try {
-        const persons = await Person.find().sort({ createdAt: -1 });
+        const persons = await Person.find({ userId: user.id }).sort({ createdAt: -1 });
         return persons;
       } catch (err) {
         throw new Error(err);

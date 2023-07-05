@@ -1,5 +1,5 @@
-const Inventory = require('../../models/Inventory');
-const checkAuth = require('../../utils/check-auth');
+const Inventory = require("../../models/Inventory");
+const checkAuth = require("../../utils/check-auth");
 module.exports = {
   Query: {
     async getItems() {
@@ -16,25 +16,15 @@ module.exports = {
         if (item) {
           return item;
         } else {
-          throw new Error('Item not found');
+          throw new Error("Item not found");
         }
       } catch (err) {
         throw new Error(err);
       }
-    }
+    },
   },
   Mutation: {
-    async createItem(
-      _,
-      {
-        itemInput: {
-          name,
-          size,
-          quantity,
-        }
-      },
-      context
-    ) {
+    async createItem(_, { itemInput: { name, size, quantity } }, context) {
       const user = checkAuth(context);
       const newItem = new Inventory({
         name,
@@ -53,13 +43,13 @@ module.exports = {
         const itemUserId = item.userId.toHexString();
         if (user.id === itemUserId) {
           await item.deleteOne();
-          return 'Item deleted successfully';
+          return "Item deleted successfully";
         } else {
-          throw new Error('Action not allowed');
+          throw new Error("Action not allowed");
         }
       } catch (err) {
         throw new Error(err);
       }
-    }
-  }
-}
+    },
+  },
+};

@@ -38,6 +38,13 @@ module.exports = gql`
     createdAt: String!
   }
 
+  type Section {
+    id: ID!
+    name: String!
+    createdAt: String!
+    userId: String!
+  }
+
   input RegisterInput {
     firstName: String!
     lastName: String!
@@ -67,6 +74,10 @@ module.exports = gql`
     quantity: Int!
   }
 
+  input SectionInput {
+    name: String!
+  }
+
   type Query {
     getUsers: [User]
     getUser(userId: ID!): User!
@@ -83,5 +94,7 @@ module.exports = gql`
     deletePerson(personId: ID!): ID!
     createItem(itemInput: ItemInput): Inventory!
     deleteItem(itemId: ID!): ID!
+    createSection(sectionInput: SectionInput): Section!
+    deleteSection(sectionId: ID!): ID!
   }
 `;
