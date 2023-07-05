@@ -2,9 +2,12 @@ const Inventory = require("../../models/Inventory");
 const checkAuth = require("../../utils/check-auth");
 module.exports = {
   Query: {
-    async getItems() {
+    async getItems(_, arts, context) {
+      const user = checkAuth(context);
       try {
-        const items = await Inventory.find().sort({ createdAt: -1 });
+        const items = await Inventory.find({ userId: user.id }).sort({
+          createdAt: -1,
+        });
         return items;
       } catch (err) {
         throw new Error(err);

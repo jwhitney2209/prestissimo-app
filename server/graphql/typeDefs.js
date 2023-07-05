@@ -1,7 +1,7 @@
 const { gql } = require("apollo-server");
 
 module.exports = gql`
-  type Person{
+  type Person {
     id: ID!
     role: String!
     firstName: String!
@@ -85,6 +85,8 @@ module.exports = gql`
     getPerson(personId: ID!): Person!
     getItems: [Inventory]
     getItem(itemId: ID!): Inventory!
+    getSections: [Section]
+    getSection(sectionId: ID!): Section!
   }
 
   type Mutation {
