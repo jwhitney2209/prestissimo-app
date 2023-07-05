@@ -13,6 +13,21 @@ module.exports = gql`
     userId: String
   }
 
+  type Section {
+    id: ID!
+    name: String!
+    createdAt: String!
+    userId: String!
+  }
+
+  type Ensemble {
+    id: ID!
+    name: String!
+    createdAt: String!
+    userId: String!
+    userOrganization: String!
+  }
+
   type Inventory {
     id: ID!
     name: String!
@@ -36,13 +51,6 @@ module.exports = gql`
     state: String!
     zip: String!
     createdAt: String!
-  }
-
-  type Section {
-    id: ID!
-    name: String!
-    createdAt: String!
-    userId: String!
   }
 
   input RegisterInput {
@@ -78,6 +86,10 @@ module.exports = gql`
     name: String!
   }
 
+  input EnsembleInput {
+    name: String!
+  }
+
   type Query {
     getUsers: [User]
     getUser(userId: ID!): User!
@@ -87,6 +99,8 @@ module.exports = gql`
     getItem(itemId: ID!): Inventory!
     getSections: [Section]
     getSection(sectionId: ID!): Section!
+    getEnsembles: [Ensemble]
+    getEnsemble(ensembleId: ID!): Ensemble!
   }
 
   type Mutation {
@@ -98,5 +112,11 @@ module.exports = gql`
     deleteItem(itemId: ID!): ID!
     createSection(sectionInput: SectionInput): Section!
     deleteSection(sectionId: ID!): ID!
+    createEnsemble(ensembleInput: EnsembleInput): Ensemble!
+    deleteEnsemble(ensembleId: ID!): ID!
+    updateSection(sectionId: ID!, sectionInput: SectionInput): Boolean
+    updatePerson(personId: ID!, personInput: PersonInput): Boolean
+    updateItem(itemId: ID!, itemInput: ItemInput): Boolean
+    updateEnsemble(ensembleId: ID!, ensembleInput: EnsembleInput): Boolean
   }
 `;

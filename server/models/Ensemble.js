@@ -5,6 +5,9 @@ const ensembleSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  userEmail: {
+    type: String,
+  },
   name: {
     type: String,
     required: true,

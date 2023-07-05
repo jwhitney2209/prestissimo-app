@@ -46,13 +46,17 @@ module.exports = {
         const itemUserId = item.userId.toHexString();
         if (user.id === itemUserId) {
           await item.deleteOne();
-          return "Item deleted successfully";
+          return `${item.name} deleted successfully.`;
         } else {
           throw new Error("Action not allowed");
         }
       } catch (err) {
         throw new Error(err);
       }
+    },
+    async updateItem(_, { itemId, itemInput: { name, size, quantity } }, context) {
+      const item = (await Inventory.updateOne({ _id: itemId }, { name: name, size: size, quantity: quantity })).modifiedCount;
+      return item; // 1 if something was edited, 0 if nothing was edited.
     },
   },
 };

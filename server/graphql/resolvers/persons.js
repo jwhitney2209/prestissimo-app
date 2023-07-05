@@ -8,7 +8,9 @@ module.exports = {
     async getPersons(_, args, context) {
       const user = checkAuth(context);
       try {
-        const persons = await Person.find({ userId: user.id }).sort({ createdAt: -1 });
+        const persons = await Person.find({ userId: user.id }).sort({
+          createdAt: -1,
+        });
         return persons;
       } catch (err) {
         throw new Error(err);
@@ -30,16 +32,7 @@ module.exports = {
   Mutation: {
     async createPerson(
       _,
-      {
-        personInput: {
-          role,
-          firstName,
-          lastName,
-          email,
-          phone,
-          grade,
-        },
-      },
+      { personInput: { role, firstName, lastName, email, phone, grade } },
       context
     ) {
       const user = checkAuth(context);
@@ -73,7 +66,29 @@ module.exports = {
       } catch (err) {
         throw new Error(err);
       }
-
+    },
+    async updatePerson(
+      _,
+      {
+        personId,
+        personInput: { role, firstName, lastName, email, phone, grade },
+      },
+      context
+    ) {
+      const person = (
+        await Person.updateOne(
+          { _id: personId },
+          {
+            role: role,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            phone: phone,
+            grade: grade,
+          }
+        )
+      ).modifiedCount;
+      return person;
     },
   },
 };

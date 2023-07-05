@@ -45,13 +45,17 @@ module.exports = {
         const sectionUserId = section.userId.toHexString();
         if (user.id === sectionUserId) {
           await section.deleteOne();
-          return "Section deleted successfully";
+          return `${section.name} deleted successfully.`;
         } else {
           throw new Error("Action not allowed");
         }
       } catch (err) {
         throw new Error(err);
       }
+    },
+    async updateSection(_, { sectionId, sectionInput: { name } }, context) {
+      const section = (await Section.updateOne({ _id: sectionId }, { name: name })).modifiedCount;
+      return section; // 1 if something was edited, 0 if nothing was edited.
     },
   },
 };
