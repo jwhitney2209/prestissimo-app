@@ -42,10 +42,17 @@ const personSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Section",
   },
-  ensemble: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Ensemble",
-  }
+  ensemble: [
+    {
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Ensemble",
+      },
+      name: {
+        type: String,
+      }
+    }
+  ]
 });
 
 const Person = mongoose.model("Person", personSchema);

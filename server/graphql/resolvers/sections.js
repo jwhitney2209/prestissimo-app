@@ -1,5 +1,4 @@
 const Section = require("../../models/Section");
-const Person = require("../../models/Person");
 const checkAuth = require("../../utils/check-auth");
 
 module.exports = {

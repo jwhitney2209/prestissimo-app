@@ -1,5 +1,6 @@
 const Inventory = require("../../models/Inventory");
 const checkAuth = require("../../utils/check-auth");
+
 module.exports = {
   Query: {
     async getItems(_, arts, context) {

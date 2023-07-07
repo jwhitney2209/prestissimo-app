@@ -98,5 +98,24 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async updatePersonWithEnsemble(_, { personId, ensembleId }, context) {
+      const ensemble = await Ensemble.findById(ensembleId);
+      const ensembleArgs = { id: ensembleId, name: ensemble.name };
+      console.log("ensembleArgs: ", ensembleArgs);
+      try {
+        const person = await Person.findOneAndUpdate(
+          { _id: personId },
+          {
+            $set: {
+              ensemble: ensembleArgs,
+            },
+          },
+          { new: true }
+        );
+        return person;
+      } catch (err) {
+        throw new Error(err);
+      }
+    }
   },
 };

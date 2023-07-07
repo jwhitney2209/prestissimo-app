@@ -1,5 +1,4 @@
 const Ensemble = require("../../models/Ensemble");
-const Person = require("../../models/Person");
 const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
@@ -80,22 +79,5 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async addEnsembleToPerson(_, { ensembleId, personId }, context) {
-      console.log("ensembleId: " + ensembleId + " // personId: " + personId)
-      try {
-        if (ensembleId && personId) {
-          const person = await Person.findByIdAndUpdate(
-            { _id: personId },
-            { $set: { ensemble: ensembleId } },
-            { new: true }
-          );
-          return person;
-        } else {
-          throw new Error("Ensemble or Person not found");
-        }
-      } catch (err) {
-        throw new Error(err);
-      }
-    }
   },
 };

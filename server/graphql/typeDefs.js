@@ -123,6 +123,6 @@ module.exports = gql`
     updatePerson(personId: ID!, personInput: PersonInput): Person!
     updateItem(itemId: ID!, itemInput: ItemInput): Inventory!
     updateEnsemble(ensembleId: ID!, ensembleInput: EnsembleInput): Ensemble!
-    addEnsembleToPerson(ensembleId: ID!, personId: ID!): Person!
+    updatePersonWithEnsemble(personId: ID!, ensembleId: ID!): Person!
   }
 `;
