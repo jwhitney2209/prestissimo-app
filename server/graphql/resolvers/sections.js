@@ -1,4 +1,5 @@
 const Section = require("../../models/Section");
+const Person = require("../../models/Person");
 const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
@@ -39,23 +40,24 @@ module.exports = {
       return section;
     },
     async deleteSection(_, { sectionId }, context) {
-      const user = checkAuth(context);
       try {
-        const section = await Section.findById(sectionId);
-        const sectionUserId = section.userId.toHexString();
-        if (user.id === sectionUserId) {
-          await section.deleteOne();
-          return `${section.name} deleted successfully.`;
-        } else {
-          throw new Error("Action not allowed");
-        }
+        const section = await Section.findByIdAndDelete(sectionId);
+        return `${section.name} was deleted successfully.`;
       } catch (err) {
         throw new Error(err);
       }
     },
     async updateSection(_, { sectionId, sectionInput: { name } }, context) {
-      const section = (await Section.updateOne({ _id: sectionId }, { name: name })).modifiedCount;
-      return section; // 1 if something was edited, 0 if nothing was edited.
+      try {
+        const section = await Section.findOneAndUpdate(
+          { _id: sectionId },
+          { $set: { name: name } },
+          { new: true }
+        );
+        return section;
+      } catch (err) {
+        throw new Error(err);
+      }
     },
   },
 };

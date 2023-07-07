@@ -1,6 +1,8 @@
 const { AuthenticationError } = require("apollo-server");
 
 const Person = require("../../models/Person");
+const Ensemble = require("../../models/Ensemble");
+const Section = require("../../models/Section");
 const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
@@ -52,17 +54,9 @@ module.exports = {
       return person;
     },
     async deletePerson(_, { personId }, context) {
-      const user = checkAuth(context);
-
       try {
-        const person = await Person.findById(personId);
-        const personUserId = person.userId.toHexString();
-        if (user.id === personUserId) {
-          await person.deleteOne();
-          return `${person.firstName} ${person.lastName} deleted successfully`;
-        } else {
-          throw new AuthenticationError("Action not allowed");
-        }
+        const person = await Person.findByIdAndDelete(personId);
+        return `${person.firstName} ${person.lastName} was deleted successfully.`;
       } catch (err) {
         throw new Error(err);
       }
@@ -71,24 +65,38 @@ module.exports = {
       _,
       {
         personId,
-        personInput: { role, firstName, lastName, email, phone, grade },
+        personInput: {
+          role,
+          firstName,
+          lastName,
+          email,
+          phone,
+          grade,
+          accountBalance,
+        },
       },
       context
     ) {
-      const person = (
-        await Person.updateOne(
+      try {
+        const person = await Person.findOneAndUpdate(
           { _id: personId },
           {
-            role: role,
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            phone: phone,
-            grade: grade,
-          }
-        )
-      ).modifiedCount;
-      return person;
+            $set: {
+              role: role,
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              phone: phone,
+              grade: grade,
+              accountBalance: accountBalance,
+            },
+          },
+          { new: true }
+        );
+        return person;
+      } catch (err) {
+        throw new Error(err);
+      }
     },
   },
 };

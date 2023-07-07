@@ -1,5 +1,6 @@
-const Ensemble = require('../../models/Ensemble');
-const checkAuth = require('../../utils/check-auth');
+const Ensemble = require("../../models/Ensemble");
+const Person = require("../../models/Person");
+const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
   Query: {
@@ -14,18 +15,31 @@ module.exports = {
         throw new Error(err);
       }
     },
-    getEnsemble: async (_, { ensembleId }) => {
+    async getEnsemble(_, { ensembleId }) {
       try {
         const ensemble = await Ensemble.findById(ensembleId);
         if (ensemble) {
           return ensemble;
         } else {
-          throw new Error('Ensemble not found');
+          throw new Error("Ensemble not found");
         }
       } catch (err) {
         throw new Error(err);
       }
-    }
+    },
+    async getEnsembleMembers(_, { ensembleId }) {
+      try {
+        const ensemble = await Ensemble.findById(ensembleId);
+        console.log(ensemble);
+        if (ensemble) {
+          return ensemble.members;
+        } else {
+          throw new Error("Ensemble not found");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
   },
   Mutation: {
     async createEnsemble(_, { ensembleInput: { name } }, context) {
@@ -48,15 +62,40 @@ module.exports = {
           await ensemble.deleteOne();
           return `${ensemble.name} deleted successfully`;
         } else {
-          throw new Error('Action not allowed');
+          throw new Error("Action not allowed");
         }
       } catch (err) {
         throw new Error(err);
       }
     },
     async updateEnsemble(_, { ensembleId, ensembleInput: { name } }, context) {
-      const ensemble = (await Ensemble.updateOne({ _id: ensembleId }, { name: name })).modifiedCount;
-      return ensemble; // 1 if something was edited, 0 if nothing was edited.
+      try {
+        const ensemble = await Ensemble.findOneAndUpdate(
+          { _id: ensembleId },
+          { $set: { name: name } },
+          { new: true }
+        );
+        return ensemble;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async addEnsembleToPerson(_, { ensembleId, personId }, context) {
+      console.log("ensembleId: " + ensembleId + " // personId: " + personId)
+      try {
+        if (ensembleId && personId) {
+          const person = await Person.findByIdAndUpdate(
+            { _id: personId },
+            { $set: { ensemble: ensembleId } },
+            { new: true }
+          );
+          return person;
+        } else {
+          throw new Error("Ensemble or Person not found");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
     }
   },
-}
+};

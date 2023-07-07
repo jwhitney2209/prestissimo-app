@@ -15,7 +15,13 @@ const ensembleSchema = new mongoose.Schema({
   },
   createdAt: {
     type: String,
-  }
+  },
+  members: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Person',
+    }
+  ]
 });
 
 const Ensemble = mongoose.model('Ensemble', ensembleSchema);

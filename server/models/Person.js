@@ -31,8 +31,20 @@ const personSchema = new mongoose.Schema({
     type: String,
     enum: ["K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
   },
+  accountBalance: {
+    type: Number,
+    default: 0,
+  },
   createdAt: {
     type: String,
+  },
+  section: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Section",
+  },
+  ensemble: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Ensemble",
   }
 });
 

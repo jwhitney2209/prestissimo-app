@@ -12,7 +12,7 @@ const sectionSchema = new mongoose.Schema({
   },
   createdAt: {
     type: String,
-  },
+  }
 });
 
 const Section = mongoose.model("Section", sectionSchema);

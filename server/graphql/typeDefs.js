@@ -10,7 +10,10 @@ module.exports = gql`
     email: String
     phone: String
     grade: String
+    accountBalance: Float
     userId: String
+    section: [Section]
+    ensemble: [Ensemble]
   }
 
   type Section {
@@ -51,6 +54,7 @@ module.exports = gql`
     state: String!
     zip: String!
     createdAt: String!
+    section: Section
   }
 
   input RegisterInput {
@@ -101,6 +105,7 @@ module.exports = gql`
     getSection(sectionId: ID!): Section!
     getEnsembles: [Ensemble]
     getEnsemble(ensembleId: ID!): Ensemble!
+    getEnsembleMembers(ensembleId: ID!): [Person]
   }
 
   type Mutation {
@@ -114,9 +119,10 @@ module.exports = gql`
     deleteSection(sectionId: ID!): ID!
     createEnsemble(ensembleInput: EnsembleInput): Ensemble!
     deleteEnsemble(ensembleId: ID!): ID!
-    updateSection(sectionId: ID!, sectionInput: SectionInput): Boolean
-    updatePerson(personId: ID!, personInput: PersonInput): Boolean
-    updateItem(itemId: ID!, itemInput: ItemInput): Boolean
-    updateEnsemble(ensembleId: ID!, ensembleInput: EnsembleInput): Boolean
+    updateSection(sectionId: ID!, sectionInput: SectionInput): Section!
+    updatePerson(personId: ID!, personInput: PersonInput): Person!
+    updateItem(itemId: ID!, itemInput: ItemInput): Inventory!
+    updateEnsemble(ensembleId: ID!, ensembleInput: EnsembleInput): Ensemble!
+    addEnsembleToPerson(ensembleId: ID!, personId: ID!): Person!
   }
 `;

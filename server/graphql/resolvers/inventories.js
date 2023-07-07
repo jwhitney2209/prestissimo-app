@@ -56,7 +56,7 @@ module.exports = {
     },
     async updateItem(_, { itemId, itemInput: { name, size, quantity } }, context) {
       const item = (await Inventory.updateOne({ _id: itemId }, { name: name, size: size, quantity: quantity })).modifiedCount;
-      return item; // 1 if something was edited, 0 if nothing was edited.
+      return item;
     },
   },
 };
