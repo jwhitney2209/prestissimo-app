@@ -5,9 +5,6 @@ const ensembleSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  userEmail: {
-    type: String,
-  },
   name: {
     type: String,
     required: true,
@@ -15,13 +12,7 @@ const ensembleSchema = new mongoose.Schema({
   },
   createdAt: {
     type: String,
-  },
-  members: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Person',
-    }
-  ]
+  }
 });
 
 const Ensemble = mongoose.model('Ensemble', ensembleSchema);

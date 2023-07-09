@@ -10,9 +10,12 @@ module.exports = {
     async getPersons(_, args, context) {
       const user = checkAuth(context);
       try {
-        const persons = await Person.find({ userId: user.id }).sort({
-          createdAt: -1,
-        });
+        const persons = await Person.find({ userId: user.id })
+          .sort({
+            createdAt: -1,
+          })
+          .populate('ensembles')
+          .populate('section');
         return persons;
       } catch (err) {
         throw new Error(err);
@@ -25,6 +28,34 @@ module.exports = {
           return person;
         } else {
           throw new Error("Student not found");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async getPersonsByEnsemble(_, { ensembleId }) {
+      try {
+        const ensemble = await Ensemble.findById(ensembleId);
+        if (ensemble) {
+          const persons = await Person.find({ ensemble: ensemble });
+          return persons;
+        } else {
+          throw new Error("Ensemble not found");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async getPersonsBySection(_, { sectionId }) {
+      try {
+        const section = await Section.findById(sectionId);
+        const sectionName = section.name;
+        console.log(sectionName);
+        if (section) {
+          const persons = await Person.find({ section: { $eq: sectionName } });
+          return persons;
+        } else {
+          throw new Error("Section not found");
         }
       } catch (err) {
         throw new Error(err);
@@ -98,24 +129,39 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async updatePersonWithEnsemble(_, { personId, ensembleId }, context) {
+    async updatePersonEnsemble(_, { personId, ensembleId }, context) {
       const ensemble = await Ensemble.findById(ensembleId);
-      const ensembleArgs = { id: ensembleId, name: ensemble.name };
-      console.log("ensembleArgs: ", ensembleArgs);
+      try {
+        const person = await Person.findOneAndUpdate(
+          { _id: personId },
+          {
+            $push: {
+              ensembles: ensemble,
+            },
+          },
+          { new: true }
+        ).populate('ensembles');
+        return person;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async updatePersonSection(_, { personId, sectionId }, context) {
+      const section = await Section.findById(sectionId);
       try {
         const person = await Person.findOneAndUpdate(
           { _id: personId },
           {
             $set: {
-              ensemble: ensembleArgs,
+              section: section,
             },
           },
           { new: true }
-        );
+        ).populate('section');
         return person;
       } catch (err) {
         throw new Error(err);
       }
-    }
+    },
   },
 };

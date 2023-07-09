@@ -9,7 +9,7 @@ const personSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true,
-    enum: ["Student", "Teacher", "Parent", "Volunteer"]
+    enum: ["Student", "Teacher", "Parent", "Volunteer"],
   },
   firstName: {
     type: String,
@@ -23,13 +23,14 @@ const personSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    lowercase: true,
   },
   phone: {
     type: String,
   },
   grade: {
     type: String,
-    enum: ["K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+    enum: ["K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
   },
   accountBalance: {
     type: Number,
@@ -42,15 +43,10 @@ const personSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Section",
   },
-  ensemble: [
+  ensembles: [
     {
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Ensemble",
-      },
-      name: {
-        type: String,
-      }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Ensemble",
     }
   ]
 });

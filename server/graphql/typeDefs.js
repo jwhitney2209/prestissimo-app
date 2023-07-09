@@ -12,8 +12,8 @@ module.exports = gql`
     grade: String
     accountBalance: Float
     userId: String
-    section: [Section]
-    ensemble: [Ensemble]
+    section: Section
+    ensembles: [Ensemble]
   }
 
   type Section {
@@ -28,7 +28,6 @@ module.exports = gql`
     name: String!
     createdAt: String!
     userId: String!
-    userOrganization: String!
   }
 
   type Inventory {
@@ -105,7 +104,8 @@ module.exports = gql`
     getSection(sectionId: ID!): Section!
     getEnsembles: [Ensemble]
     getEnsemble(ensembleId: ID!): Ensemble!
-    getEnsembleMembers(ensembleId: ID!): [Person]
+    getPersonsByEnsemble(ensembleId: ID!): [Person]
+    getPersonsBySection(sectionId: ID!): [Person]
   }
 
   type Mutation {
@@ -123,6 +123,7 @@ module.exports = gql`
     updatePerson(personId: ID!, personInput: PersonInput): Person!
     updateItem(itemId: ID!, itemInput: ItemInput): Inventory!
     updateEnsemble(ensembleId: ID!, ensembleInput: EnsembleInput): Ensemble!
-    updatePersonWithEnsemble(personId: ID!, ensembleId: ID!): Person!
+    updatePersonEnsemble(personId: ID!, ensembleId: ID!): Person!
+    updatePersonSection(personId: ID!, sectionId: ID!): Person!
   }
 `;

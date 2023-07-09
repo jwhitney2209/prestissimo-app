@@ -1,4 +1,5 @@
 const Ensemble = require("../../models/Ensemble");
+const Person = require("../../models/Person");
 const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
@@ -26,19 +27,6 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getEnsembleMembers(_, { ensembleId }) {
-      try {
-        const ensemble = await Ensemble.findById(ensembleId);
-        console.log(ensemble);
-        if (ensemble) {
-          return ensemble.members;
-        } else {
-          throw new Error("Ensemble not found");
-        }
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
   },
   Mutation: {
     async createEnsemble(_, { ensembleInput: { name } }, context) {
@@ -46,26 +34,14 @@ module.exports = {
       const newEnsemble = new Ensemble({
         name,
         userId: user.id,
-        userEmail: user.email,
         createdAt: new Date().toISOString(),
       });
       const ensemble = await newEnsemble.save();
       return ensemble;
     },
     async deleteEnsemble(_, { ensembleId }, context) {
-      const user = checkAuth(context);
-      try {
-        const ensemble = await Ensemble.findById(ensembleId);
-        const ensembleUserId = ensemble.userId.toHexString();
-        if (user.id === ensembleUserId) {
-          await ensemble.deleteOne();
-          return `${ensemble.name} deleted successfully`;
-        } else {
-          throw new Error("Action not allowed");
-        }
-      } catch (err) {
-        throw new Error(err);
-      }
+      const ensemble = await Ensemble.findByIdAndDelete({ ensembleId });
+      return ensemble;
     },
     async updateEnsemble(_, { ensembleId, ensembleInput: { name } }, context) {
       try {
