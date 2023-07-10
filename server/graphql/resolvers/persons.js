@@ -39,7 +39,7 @@ module.exports = {
       try {
         const ensemble = await Ensemble.findById(ensembleId);
         if (ensemble) {
-          const persons = await Person.find({ ensemble: ensemble });
+          const persons = await Person.find({ ensembles: ensemble }).populate('section');
           return persons;
         } else {
           throw new Error("Ensemble not found");
@@ -51,10 +51,8 @@ module.exports = {
     async getPersonsBySection(_, { sectionId }) {
       try {
         const section = await Section.findById(sectionId);
-        const sectionName = section.name;
-        console.log(sectionName);
         if (section) {
-          const persons = await Person.find({ section: { $eq: sectionName } });
+          const persons = await Person.find({ section: section }).populate('ensembles');
           return persons;
         } else {
           throw new Error("Section not found");
@@ -63,6 +61,19 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async getPersonsByUniform(_, { uniformId }) {
+      try {
+        const uniform = await Uniform.findById(uniformId);
+        if (uniform) {
+          const persons = await Person.find({ uniforms: uniform });
+          return persons;
+        } else {
+          throw new Error("Uniform not found");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    }
   },
   Mutation: {
     async createPerson(

@@ -126,6 +126,7 @@ module.exports = gql`
     # get by
     getPersonsByEnsemble(ensembleId: ID!): [Person]
     getPersonsBySection(sectionId: ID!): [Person]
+    getPersonsByUniform(uniformId: ID!): [Person]
   }
 
   type Mutation {
