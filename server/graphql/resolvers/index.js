@@ -3,6 +3,7 @@ const personsResolvers = require("./persons");
 const itemsResolvers = require("./items");
 const sectionsResolvers = require("./sections");
 const ensembleResolvers = require("./ensembles");
+const uniformsResolvers = require("./uniforms");
 
 module.exports = {
   Query: {
@@ -11,6 +12,7 @@ module.exports = {
     ...itemsResolvers.Query,
     ...sectionsResolvers.Query,
     ...ensembleResolvers.Query,
+    ...uniformsResolvers.Query,
   },
   Mutation: {
     ...usersResolvers.Mutation,
@@ -18,5 +20,6 @@ module.exports = {
     ...itemsResolvers.Mutation,
     ...sectionsResolvers.Mutation,
     ...ensembleResolvers.Mutation,
+    ...uniformsResolvers.Mutation,
   },
 };

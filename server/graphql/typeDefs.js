@@ -14,6 +14,7 @@ module.exports = gql`
     userId: String
     section: Section
     ensembles: [Ensemble]
+    uniforms: [Uniform]
   }
 
   type Section {
@@ -52,7 +53,6 @@ module.exports = gql`
     state: String!
     zip: String!
     createdAt: String!
-    section: Section
   }
 
   type Uniform {
@@ -69,7 +69,7 @@ module.exports = gql`
     size: String
     condition: String
   }
-  
+
   input RegisterInput {
     firstName: String!
     lastName: String!
@@ -110,36 +110,47 @@ module.exports = gql`
   }
 
   type Query {
+    # get all
     getUsers: [User]
-    getUser(userId: ID!): User!
     getPersons: [Person]
-    getPerson(personId: ID!): Person!
     getItems: [Item]
-    getItem(itemId: ID!): Item!
     getSections: [Section]
-    getSection(sectionId: ID!): Section!
     getEnsembles: [Ensemble]
+    getUniforms: [Uniform]
+    # get one
+    getUser(userId: ID!): User!
+    getPerson(personId: ID!): Person!
+    getItem(itemId: ID!): Item!
+    getSection(sectionId: ID!): Section!
     getEnsemble(ensembleId: ID!): Ensemble!
+    # get by
     getPersonsByEnsemble(ensembleId: ID!): [Person]
     getPersonsBySection(sectionId: ID!): [Person]
   }
 
   type Mutation {
+    # user mutations
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
+    # create 
     createPerson(personInput: PersonInput): Person!
-    deletePerson(personId: ID!): ID!
-    createItem(itemInput: ItemInput): Item!
-    deleteItem(itemId: ID!): ID!
     createSection(sectionInput: SectionInput): Section!
-    deleteSection(sectionId: ID!): ID!
     createEnsemble(ensembleInput: EnsembleInput): Ensemble!
-    deleteEnsemble(ensembleId: ID!): ID!
+    createItem(itemInput: ItemInput): Item!
+    createUniform(uniformInput: UniformInput): Uniform!
+    # update
     updateSection(sectionId: ID!, sectionInput: SectionInput): Section!
     updatePerson(personId: ID!, personInput: PersonInput): Person!
     updateItem(itemId: ID!, itemInput: ItemInput): Item!
     updateEnsemble(ensembleId: ID!, ensembleInput: EnsembleInput): Ensemble!
-    updatePersonEnsemble(personId: ID!, ensembleId: ID!): Person!
-    updatePersonSection(personId: ID!, sectionId: ID!): Person!
+    assignEnsembleToPerson(personId: ID!, ensembleId: ID!): Person!
+    assignSectionToPerson(personId: ID!, sectionId: ID!): Person!
+    assignUniformToPerson(personId: ID!, uniformId: ID!): Person!
+    # delete
+    deletePerson(personId: ID!): ID!
+    deleteItem(itemId: ID!): ID!
+    deleteSection(sectionId: ID!): ID!
+    deleteEnsemble(ensembleId: ID!): ID!
+    deleteUniform(uniformId: ID!): ID!
   }
 `;

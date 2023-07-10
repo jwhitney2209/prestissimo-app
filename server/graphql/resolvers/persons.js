@@ -3,6 +3,7 @@ const { AuthenticationError } = require("apollo-server");
 const Person = require("../../models/Person");
 const Ensemble = require("../../models/Ensemble");
 const Section = require("../../models/Section");
+const Uniform = require("../../models/Uniform");
 const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
@@ -15,7 +16,8 @@ module.exports = {
             createdAt: -1,
           })
           .populate('ensembles')
-          .populate('section');
+          .populate('section')
+          .populate('uniforms');
         return persons;
       } catch (err) {
         throw new Error(err);
@@ -129,7 +131,7 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async updatePersonEnsemble(_, { personId, ensembleId }, context) {
+    async assignEnsembleToPerson(_, { personId, ensembleId }, context) {
       const ensemble = await Ensemble.findById(ensembleId);
       try {
         const person = await Person.findOneAndUpdate(
@@ -146,7 +148,7 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async updatePersonSection(_, { personId, sectionId }, context) {
+    async assignSectionToPerson(_, { personId, sectionId }, context) {
       const section = await Section.findById(sectionId);
       try {
         const person = await Person.findOneAndUpdate(
@@ -163,5 +165,22 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async assignUniformToPerson(_, { personId, uniformId }, context) {
+      const uniform = await Uniform.findById(uniformId);
+      try {
+        const person = await Person.findOneAndUpdate(
+          { _id: personId },
+          {
+            $push: {
+              uniforms: uniform,
+            },
+          },
+          { new: true }
+        ).populate('uniforms');
+        return person;
+      } catch (err) {
+        throw new Error(err);
+      }
+    }
   },
 };
