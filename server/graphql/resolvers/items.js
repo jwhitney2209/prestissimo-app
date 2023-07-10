@@ -1,4 +1,4 @@
-const Inventory = require("../../models/Inventory");
+const Item = require("../../models/Item");
 const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
@@ -6,7 +6,7 @@ module.exports = {
     async getItems(_, arts, context) {
       const user = checkAuth(context);
       try {
-        const items = await Inventory.find({ userId: user.id }).sort({
+        const items = await Item.find({ userId: user.id }).sort({
           createdAt: -1,
         });
         return items;
@@ -16,7 +16,7 @@ module.exports = {
     },
     async getItem(_, { itemId }) {
       try {
-        const item = await Inventory.findById(itemId);
+        const item = await Item.findById(itemId);
         if (item) {
           return item;
         } else {
@@ -28,11 +28,17 @@ module.exports = {
     },
   },
   Mutation: {
-    async createItem(_, { itemInput: { name, size, quantity } }, context) {
+    async createItem(
+      _,
+      { itemInput: { name, description, modelNumber, serialCode, quantity } },
+      context
+    ) {
       const user = checkAuth(context);
-      const newItem = new Inventory({
+      const newItem = new Item({
         name,
-        size,
+        description,
+        modelNumber,
+        serialCode,
         quantity,
         userId: user.id,
         createdAt: new Date().toISOString(),
@@ -43,7 +49,7 @@ module.exports = {
     async deleteItem(_, { itemId }, context) {
       const user = checkAuth(context);
       try {
-        const item = await Inventory.findById(itemId);
+        const item = await Item.findById(itemId);
         const itemUserId = item.userId.toHexString();
         if (user.id === itemUserId) {
           await item.deleteOne();
@@ -55,8 +61,26 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async updateItem(_, { itemId, itemInput: { name, size, quantity } }, context) {
-      const item = (await Inventory.updateOne({ _id: itemId }, { name: name, size: size, quantity: quantity })).modifiedCount;
+    async updateItem(
+      _,
+      {
+        itemId,
+        itemInput: { name, description, modelNumber, serialCode, quantity },
+      },
+      context
+    ) {
+      const item = (
+        await Item.updateOne(
+          { _id: itemId },
+          {
+            name: name,
+            description: description,
+            modelNumber: modelNumber,
+            serialCode: serialCode,
+            quantity: quantity,
+          }
+        )
+      ).modifiedCount;
       return item;
     },
   },

@@ -30,10 +30,9 @@ module.exports = gql`
     userId: String!
   }
 
-  type Inventory {
+  type Item {
     id: ID!
     name: String!
-    size: String
     quantity: Int!
     createdAt: String!
     userId: String
@@ -56,6 +55,21 @@ module.exports = gql`
     section: Section
   }
 
+  type Uniform {
+    id: ID!
+    name: String!
+    size: String
+    condition: String
+    createdAt: String!
+    userId: String!
+  }
+
+  input UniformInput {
+    name: String!
+    size: String
+    condition: String
+  }
+  
   input RegisterInput {
     firstName: String!
     lastName: String!
@@ -81,7 +95,9 @@ module.exports = gql`
 
   input ItemInput {
     name: String!
-    size: String
+    description: String
+    modelNumber: String
+    serialCode: String
     quantity: Int!
   }
 
@@ -98,8 +114,8 @@ module.exports = gql`
     getUser(userId: ID!): User!
     getPersons: [Person]
     getPerson(personId: ID!): Person!
-    getItems: [Inventory]
-    getItem(itemId: ID!): Inventory!
+    getItems: [Item]
+    getItem(itemId: ID!): Item!
     getSections: [Section]
     getSection(sectionId: ID!): Section!
     getEnsembles: [Ensemble]
@@ -113,7 +129,7 @@ module.exports = gql`
     login(email: String!, password: String!): User!
     createPerson(personInput: PersonInput): Person!
     deletePerson(personId: ID!): ID!
-    createItem(itemInput: ItemInput): Inventory!
+    createItem(itemInput: ItemInput): Item!
     deleteItem(itemId: ID!): ID!
     createSection(sectionInput: SectionInput): Section!
     deleteSection(sectionId: ID!): ID!
@@ -121,7 +137,7 @@ module.exports = gql`
     deleteEnsemble(ensembleId: ID!): ID!
     updateSection(sectionId: ID!, sectionInput: SectionInput): Section!
     updatePerson(personId: ID!, personInput: PersonInput): Person!
-    updateItem(itemId: ID!, itemInput: ItemInput): Inventory!
+    updateItem(itemId: ID!, itemInput: ItemInput): Item!
     updateEnsemble(ensembleId: ID!, ensembleInput: EnsembleInput): Ensemble!
     updatePersonEnsemble(personId: ID!, ensembleId: ID!): Person!
     updatePersonSection(personId: ID!, sectionId: ID!): Person!

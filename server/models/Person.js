@@ -48,6 +48,12 @@ const personSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Ensemble",
     }
+  ],
+  uniforms: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Uniform",
+    }
   ]
 });
 
