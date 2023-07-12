@@ -6,8 +6,10 @@ import CallToAction from '../components/CallToAction.component.jsx'
 export default function Home() {
   return (
     <>
+    <div className='mx-auto max-w-7xl'>
     <Header />
     <CallToAction />
+    </div>
     </>
   )
 }

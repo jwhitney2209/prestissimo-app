@@ -15,6 +15,10 @@ import Home from "./pages/Home";
 import SignIn from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Console from "./pages/Console";
+import Dashboard from "./pages/Dashboard";
+import Students from "./pages/Students";
+import Uniforms from "./pages/Uniforms";
+import AddStudent from "./pages/AddStudent";
 
 const loggedIn = Auth.loggedIn();
 
@@ -40,11 +44,16 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <div className="mx-auto max-w-7xl">
+
         <Routes>
           {loggedIn ? (
             <>
-              <Route path="/" element={<Console />} />
+              <Route path="/" element={<Console />}>
+                <Route index element={<Dashboard />} />
+                <Route path="students" element={<Students />} />
+                <Route path="students/add-student" element={<AddStudent />} />
+                <Route path="uniforms" element={<Uniforms />} />
+              </Route>
             </>
           ) : (
             <>
@@ -54,7 +63,7 @@ function App() {
             </>
           )}
         </Routes>
-      </div>
+
     </ApolloProvider>
   );
 }

@@ -10,10 +10,9 @@ function generateToken(user) {
   return jwt.sign(
     {
       id: user.id,
-      email: user.email,
     },
     process.env.SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: "3d" }
   );
 }
 
@@ -67,17 +66,9 @@ module.exports = {
       _,
       {
         registerInput: {
-          firstName,
-          lastName,
           email,
-          phone,
           password,
           confirmPassword,
-          organization,
-          street,
-          city,
-          state,
-          zip,
         },
       },
       context,
@@ -85,17 +76,9 @@ module.exports = {
     ) {
       // Validate user data
       const { valid, errors } = validateRegisterInput(
-        firstName,
-        lastName,
         email,
-        phone,
         password,
         confirmPassword,
-        organization,
-        street,
-        city,
-        state,
-        zip
       );
       if (!valid) {
         throw new UserInputError("Errors", { errors });
@@ -113,16 +96,8 @@ module.exports = {
       password = await bcrypt.hash(password, 12);
 
       const newUser = new User({
-        firstName,
-        lastName,
         email,
-        phone,
         password,
-        organization,
-        street,
-        city,
-        state,
-        zip,
         createdAt: new Date().toISOString(),
       });
 

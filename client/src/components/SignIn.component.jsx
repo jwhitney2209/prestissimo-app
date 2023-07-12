@@ -106,7 +106,11 @@ export default function SignIn() {
             </button>
           </div>
         </form>
-        {error && <div className="text-red-500 font-bold">Sign in failed</div>}
+        {error && (
+          <div className="my-4 bg-red-200 rounded-md border-0 py-3.5">
+            <p className="text-red-500 text-center">Invalid email or password</p>
+          </div>
+        )}
       </div>
     </div>
   );

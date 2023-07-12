@@ -41,17 +41,9 @@ module.exports = gql`
 
   type User {
     id: ID!
-    firstName: String!
-    lastName: String!
     email: String!
     token: String!
-    phone: String!
     password: String!
-    organization: String!
-    street: String!
-    city: String!
-    state: String!
-    zip: String!
     createdAt: String!
   }
 
@@ -71,17 +63,9 @@ module.exports = gql`
   }
 
   input RegisterInput {
-    firstName: String!
-    lastName: String!
     email: String!
-    phone: String!
     password: String!
     confirmPassword: String!
-    organization: String!
-    street: String!
-    city: String!
-    state: String!
-    zip: String!
   }
 
   input PersonInput {
