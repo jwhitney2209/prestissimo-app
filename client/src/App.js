@@ -19,6 +19,7 @@ import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
 import Uniforms from "./pages/Uniforms";
 import AddStudent from "./pages/AddStudent";
+import About from "./pages/About";
 
 const loggedIn = Auth.loggedIn();
 
@@ -37,33 +38,33 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  uri: "http://localhost:5000/graphql",
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
 function App() {
   return (
     <ApolloProvider client={client}>
-
-        <Routes>
-          {loggedIn ? (
-            <>
-              <Route path="/" element={<Console />}>
-                <Route index element={<Dashboard />} />
-                <Route path="students" element={<Students />} />
-                <Route path="students/add-student" element={<AddStudent />} />
-                <Route path="uniforms" element={<Uniforms />} />
-              </Route>
-            </>
-          ) : (
-            <>
-              <Route path="/" element={<Home />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-            </>
-          )}
-        </Routes>
-
+      <Routes>
+        {loggedIn ? (
+          <>
+            <Route path="/" element={<Console />}>
+              <Route index element={<Dashboard />} />
+              <Route path="students" element={<Students />} />
+              <Route path="add-student" element={<AddStudent />} />
+              <Route path="uniforms" element={<Uniforms />} />
+            </Route>
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<Home />}>
+              <Route path="about" element={<About />} />
+            </Route>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+          </>
+        )}
+      </Routes>
     </ApolloProvider>
   );
 }
