@@ -8,6 +8,8 @@ const GET_PERSONS_BASIC_INFO = gql`
     lastName
     grade
     email
+    phone
+    grade
   }
 }
 `

@@ -6,11 +6,6 @@ const personSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  role: {
-    type: String,
-    required: true,
-    enum: ["Student", "Teacher", "Parent", "Volunteer"],
-  },
   firstName: {
     type: String,
     required: true,
@@ -30,7 +25,6 @@ const personSchema = new mongoose.Schema({
   },
   grade: {
     type: String,
-    enum: ["K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
   },
   accountBalance: {
     type: Number,

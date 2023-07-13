@@ -3,6 +3,8 @@ import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
+import prestissimo_logo from "../assets/prestissimo_logo.svg";
+
 const navigation = [
   {
     name: "Home",
@@ -29,9 +31,9 @@ export default function Header() {
       >
         {/* Logo */}
         <div className="flex lg:flex-1">
-          <Link to="/" className="-m-1.5 p-1.5">
+          <Link to="/" className="-m-1.5 p-1.5 text-gray-900">
             <span className="sr-only">Prestissimo</span>
-            <p className="font-bold hover:text-gray-700">Prestissimo</p>
+            <img src={prestissimo_logo} className="h-14 w-auto" />
           </Link>
         </div>
         {/* NavMenu */}

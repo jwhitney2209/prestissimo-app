@@ -15,9 +15,9 @@ module.exports = {
           .sort({
             createdAt: -1,
           })
-          .populate('ensembles')
-          .populate('section')
-          .populate('uniforms');
+          .populate("ensembles")
+          .populate("section")
+          .populate("uniforms");
         return persons;
       } catch (err) {
         throw new Error(err);
@@ -39,7 +39,9 @@ module.exports = {
       try {
         const ensemble = await Ensemble.findById(ensembleId);
         if (ensemble) {
-          const persons = await Person.find({ ensembles: ensemble }).populate('section');
+          const persons = await Person.find({ ensembles: ensemble }).populate(
+            "section"
+          );
           return persons;
         } else {
           throw new Error("Ensemble not found");
@@ -52,7 +54,9 @@ module.exports = {
       try {
         const section = await Section.findById(sectionId);
         if (section) {
-          const persons = await Person.find({ section: section }).populate('ensembles');
+          const persons = await Person.find({ section: section }).populate(
+            "ensembles"
+          );
           return persons;
         } else {
           throw new Error("Section not found");
@@ -73,17 +77,16 @@ module.exports = {
       } catch (err) {
         throw new Error(err);
       }
-    }
+    },
   },
   Mutation: {
     async createPerson(
       _,
-      { personInput: { role, firstName, lastName, email, phone, grade } },
+      { firstName, lastName, email, phone, grade },
       context
     ) {
       const user = checkAuth(context);
       const newPerson = new Person({
-        role,
         firstName,
         lastName,
         email,
@@ -109,15 +112,12 @@ module.exports = {
       _,
       {
         personId,
-        personInput: {
-          role,
-          firstName,
-          lastName,
-          email,
-          phone,
-          grade,
-          accountBalance,
-        },
+        firstName,
+        lastName,
+        email,
+        phone,
+        grade,
+        accountBalance,
       },
       context
     ) {
@@ -126,7 +126,6 @@ module.exports = {
           { _id: personId },
           {
             $set: {
-              role: role,
               firstName: firstName,
               lastName: lastName,
               email: email,
@@ -153,7 +152,7 @@ module.exports = {
             },
           },
           { new: true }
-        ).populate('ensembles');
+        ).populate("ensembles");
         return person;
       } catch (err) {
         throw new Error(err);
@@ -170,7 +169,7 @@ module.exports = {
             },
           },
           { new: true }
-        ).populate('section');
+        ).populate("section");
         return person;
       } catch (err) {
         throw new Error(err);
@@ -187,11 +186,11 @@ module.exports = {
             },
           },
           { new: true }
-        ).populate('uniforms');
+        ).populate("uniforms");
         return person;
       } catch (err) {
         throw new Error(err);
       }
-    }
+    },
   },
 };

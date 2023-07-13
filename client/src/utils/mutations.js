@@ -7,5 +7,18 @@ export const LOGIN_USER = gql`
       email
       token
     }
-  }
+  }, 
 `;
+
+export const CREATE_PERSON = gql`
+  mutation createPerson($firstName: String!, $lastName: String!, $email: String!, $phone: String!, $grade: String!) {
+    createPerson(firstName: $firstName, lastName: $lastName, email: $email, phone: $phone, grade: $grade) {
+      id
+      firstName
+      lastName
+      email
+      phone
+      grade
+    }
+  }
+`

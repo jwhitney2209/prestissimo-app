@@ -4,7 +4,6 @@ import { GET_PERSONS_BASIC_INFO } from "../utils/queries";
 
 export default function StudentTable() {
   const { loading, error, data } = useQuery(GET_PERSONS_BASIC_INFO);
-  console.log(data);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error</p>;

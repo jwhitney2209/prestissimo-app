@@ -3,7 +3,6 @@ const { gql } = require("apollo-server");
 module.exports = gql`
   type Person {
     id: ID!
-    role: String!
     firstName: String!
     lastName: String!
     createdAt: String!
@@ -68,15 +67,6 @@ module.exports = gql`
     confirmPassword: String!
   }
 
-  input PersonInput {
-    role: String!
-    firstName: String!
-    lastName: String!
-    email: String
-    phone: String
-    grade: String
-  }
-
   input ItemInput {
     name: String!
     description: String
@@ -118,14 +108,14 @@ module.exports = gql`
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
     # create 
-    createPerson(personInput: PersonInput): Person!
+    createPerson(firstName: String!, lastName: String!, email: String!, phone: String!, grade: String!): Person!
     createSection(sectionInput: SectionInput): Section!
     createEnsemble(ensembleInput: EnsembleInput): Ensemble!
     createItem(itemInput: ItemInput): Item!
     createUniform(uniformInput: UniformInput): Uniform!
     # update
     updateSection(sectionId: ID!, sectionInput: SectionInput): Section!
-    updatePerson(personId: ID!, personInput: PersonInput): Person!
+    updatePerson(personId: ID!, firstName: String!, lastName: String!, email: String!, phone: String!, grade: String!): Person!
     updateItem(itemId: ID!, itemInput: ItemInput): Item!
     updateEnsemble(ensembleId: ID!, ensembleInput: EnsembleInput): Ensemble!
     assignEnsembleToPerson(personId: ID!, ensembleId: ID!): Person!

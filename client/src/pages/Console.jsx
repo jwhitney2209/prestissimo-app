@@ -11,6 +11,8 @@ import {
 
 import Auth from "../utils/auth";
 
+import p_logo from "../assets/p_logo.svg";
+
 import { Link, Outlet } from "react-router-dom";
 
 const navigation = [
@@ -106,8 +108,8 @@ export default function Console() {
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
                     <div className="flex h-16 shrink-0 items-center">
                       <img
-                        className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                        className="mt-2 h-10 w-10"
+                        src={p_logo}
                         alt="Your Company"
                       />
                     </div>
@@ -166,8 +168,8 @@ export default function Console() {
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6">
             <div className="flex h-16 shrink-0 items-center">
               <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                className="mt-2 h-10 w-10"
+                src={p_logo}
                 alt="Your Company"
               />
             </div>
