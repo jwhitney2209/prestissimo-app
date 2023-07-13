@@ -33,7 +33,7 @@ export default function Header() {
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5 text-gray-900">
             <span className="sr-only">Prestissimo</span>
-            <img src={prestissimo_logo} className="h-14 w-auto" />
+            <img src={prestissimo_logo} className="h-14 w-auto" alt="logo" />
           </Link>
         </div>
         {/* NavMenu */}

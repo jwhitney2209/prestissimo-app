@@ -12,7 +12,7 @@ export default function AddStudent() {
   const [phone, setPhone] = useState("");
   const [grade, setGrade] = useState("");
 
-  const [createPerson, { error }] = useMutation(CREATE_PERSON, {
+  const [createPerson] = useMutation(CREATE_PERSON, {
     variables: { firstName, lastName, email, phone, grade },
     refetchQueries: [{ query: GET_PERSONS_BASIC_INFO }],
   });
