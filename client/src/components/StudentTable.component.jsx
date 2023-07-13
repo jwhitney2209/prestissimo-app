@@ -31,7 +31,7 @@ export default function StudentTable() {
                   >
                     Name
                   </th>
-                  <th className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell">
+                  <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell">
                     Email
                   </th>
                   <th className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell">
@@ -48,7 +48,7 @@ export default function StudentTable() {
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                       {person.lastName}, {person.firstName}
                     </td>
-                    <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
                       {person.email}
                     </td>
                     <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
