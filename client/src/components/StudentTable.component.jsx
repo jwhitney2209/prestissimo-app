@@ -2,20 +2,9 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_PERSONS_BASIC_INFO } from "../utils/queries";
 
-const people = [
-  {
-    id: "01",
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-];
-
 export default function StudentTable() {
   const { loading, error, data } = useQuery(GET_PERSONS_BASIC_INFO);
   console.log(data);
-
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error</p>;
