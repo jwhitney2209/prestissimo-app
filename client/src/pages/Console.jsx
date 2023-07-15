@@ -232,7 +232,7 @@ export default function Console() {
           </div>
         </div>
 
-        <main className="py-10 lg:pl-72">
+        <main className="py-10 lg:pl-72 bg-white">
           <div className="px-4 sm:px-6 lg:px-8">
             <Outlet />
           </div>

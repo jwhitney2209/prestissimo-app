@@ -58,7 +58,7 @@ export default function Header() {
           </Link>
           <Link
             to="/signup"
-            className="rounded-md bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="rounded-md outline outline-offset-0 outline-1 hover:outline-gray-50 bg-gray-50 hover:bg-transparent hover:text-gray-50 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Sign Up
           </Link>

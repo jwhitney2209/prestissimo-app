@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../utils/mutations";
+import p_logo_dark from "../assets/p_logo_dark.svg";
 
 import Auth from "../utils/auth";
 
@@ -38,11 +39,13 @@ export default function SignIn() {
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        {/* <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
-          /> */}
+        <Link to="/"> 
+          <img
+            className="mx-auto h-14 w-auto"
+            src={p_logo_dark}
+            alt="Prestissimo Logo"
+          />
+        </Link>
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Sign in to your account
         </h2>
@@ -64,8 +67,9 @@ export default function SignIn() {
                 type="email"
                 autoComplete="email"
                 onChange={handleChange}
+                placeholder="example@gmail.com"
                 required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
+                className="block w-full bg-white/5 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-800 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -92,7 +96,7 @@ export default function SignIn() {
                 autoComplete="current-password"
                 onChange={handleChange}
                 required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
+                className="block w-full bg-white/5 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-800 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -100,7 +104,7 @@ export default function SignIn() {
           <div>
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-gray-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="flex w-full justify-center rounded-md bg-gray-900 hover:bg-gray-700 px-3 py-1.5 text-sm font-semibold leading-6 text-gray-50 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-50"
             >
               Sign in
             </button>
@@ -108,7 +112,9 @@ export default function SignIn() {
         </form>
         {error && (
           <div className="my-4 bg-red-200 rounded-md border-0 py-3.5">
-            <p className="text-red-500 text-center">Invalid email or password</p>
+            <p className="text-red-500 text-center">
+              Invalid email or password
+            </p>
           </div>
         )}
       </div>
