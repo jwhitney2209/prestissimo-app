@@ -3,7 +3,10 @@ const jwt = require("jsonwebtoken");
 const { UserInputError } = require("apollo-server");
 require("dotenv").config();
 
-const { validateRegisterInput, validateLoginInput } = require("../../utils/validators");
+const {
+  validateRegisterInput,
+  validateLoginInput,
+} = require("../../utils/validators");
 const User = require("../../models/User");
 
 function generateToken(user) {
@@ -37,24 +40,24 @@ module.exports = {
       } catch (err) {
         throw new Error(err);
       }
-    }
+    },
   },
   Mutation: {
     async login(_, { email, password }) {
       const { errors, valid } = validateLoginInput(email, password);
-      const user = await User.findOne({email});
-      if(!user) {
+      const user = await User.findOne({ email });
+      if (!user) {
         errors.general = "Email not found";
         throw new UserInputError("Email not found", { errors });
       }
 
       const match = await bcrypt.compare(password, user.password);
-      if(!match) {
+      if (!match) {
         errors.general = "Invalid credentials";
         throw new UserInputError("Invalid credentials", { errors });
       }
 
-      const token = generateToken(user)
+      const token = generateToken(user);
 
       return {
         ...user._doc,
@@ -62,23 +65,12 @@ module.exports = {
         token,
       };
     },
-    async register(
-      _,
-      {
-        registerInput: {
-          email,
-          password,
-          confirmPassword,
-        },
-      },
-      context,
-      info
-    ) {
+    async register(_, { email, password, confirmPassword }, context, info) {
       // Validate user data
       const { valid, errors } = validateRegisterInput(
         email,
         password,
-        confirmPassword,
+        confirmPassword
       );
       if (!valid) {
         throw new UserInputError("Errors", { errors });

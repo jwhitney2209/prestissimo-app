@@ -61,12 +61,6 @@ module.exports = gql`
     condition: String
   }
 
-  input RegisterInput {
-    email: String!
-    password: String!
-    confirmPassword: String!
-  }
-
   input ItemInput {
     name: String!
     description: String
@@ -105,7 +99,7 @@ module.exports = gql`
 
   type Mutation {
     # user mutations
-    register(registerInput: RegisterInput): User!
+    register(email: String!, password: String!, confirmPassword: String!): User!
     login(email: String!, password: String!): User!
     # create 
     createPerson(firstName: String!, lastName: String!, email: String!, phone: String!, grade: String!): Person!
