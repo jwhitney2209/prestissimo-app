@@ -2,6 +2,8 @@ import React from "react";
 
 import Header from "../components/Header.component.jsx";
 import CallToAction from "../components/CallToAction.component.jsx";
+import About from "../components/About.component.jsx";
+import Pricing from "../components/Pricing.component.jsx";
 import Footer from "../components/Footer.component.jsx"
 export default function Home() {
   return (
@@ -9,6 +11,8 @@ export default function Home() {
       <div className="mx-auto">
         <Header />
         <CallToAction />
+        <About />
+        <Pricing />
         <Footer />
       </div>
     </>

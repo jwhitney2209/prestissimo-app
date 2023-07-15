@@ -45,8 +45,8 @@ export default function CallToAction() {
             />
             <defs>
               <radialGradient id="827591b1-ce8c-4110-b064-7cb85a0b1217">
-                <stop stopColor="#7775D6" />
-                <stop offset={1} stopColor="#E935C1" />
+                <stop stopColor="#d6d475" />
+                <stop offset={1} stopColor="#d97706" />
               </radialGradient>
             </defs>
           </svg>
