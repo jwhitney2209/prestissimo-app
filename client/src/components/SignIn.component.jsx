@@ -27,20 +27,20 @@ export default function SignIn() {
       });
       const token = data.login.token;
       Auth.login(token);
+
+      setFormState({
+        email: "",
+        password: "",
+      });
     } catch (e) {
       console.log(e);
     }
-
-    setFormState({
-      email: "",
-      password: "",
-    });
   };
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <Link to="/"> 
+        <Link to="/">
           <img
             className="mx-auto h-14 w-auto"
             src={p_logo_dark}
@@ -113,8 +113,8 @@ export default function SignIn() {
         </form>
         {error && (
           <div className="my-4 bg-red-200 rounded-md border-0 py-3.5">
-            <p className="text-red-500 text-center">
-              Invalid email or password
+            <p className="text-red-500 font-semibold text-center">
+              {error.message}
             </p>
           </div>
         )}
