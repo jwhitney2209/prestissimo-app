@@ -1,5 +1,5 @@
 const Ensemble = require("../../models/Ensemble");
-const Person = require("../../models/Person");
+const Person = require("../../models/Student");
 const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
@@ -29,7 +29,7 @@ module.exports = {
     },
   },
   Mutation: {
-    async createEnsemble(_, { ensembleInput: { name } }, context) {
+    async addEnsemble(_, { name }, context) {
       const user = checkAuth(context);
       const newEnsemble = new Ensemble({
         name,

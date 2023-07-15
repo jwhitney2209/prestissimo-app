@@ -28,7 +28,7 @@ module.exports = {
     },
   },
   Mutation: {
-    async createSection(_, { sectionInput: { name } }, context) {
+    async addSection(_, { name }, context) {
       const user = checkAuth(context);
       const newSection = new Section({
         name,

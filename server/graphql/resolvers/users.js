@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { UserInputError } = require("apollo-server");
 require("dotenv").config();
 
 const {
@@ -48,13 +47,11 @@ module.exports = {
       const user = await User.findOne({ email });
       if (!user) {
         errors.general = "Email not found";
-        throw new UserInputError("Email not found", { errors });
       }
 
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
         errors.general = "Invalid credentials";
-        throw new UserInputError("Invalid credentials", { errors });
       }
 
       const token = generateToken(user);

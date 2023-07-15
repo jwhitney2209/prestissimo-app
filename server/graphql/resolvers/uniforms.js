@@ -1,5 +1,5 @@
 const Uniform = require("../../models/Uniform");
-const { AuthenticationError } = require("apollo-server");
+const { GraphQLError } = require("graphql");
 const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
@@ -17,9 +17,9 @@ module.exports = {
     },
   },
   Mutation: {
-    async createUniform(
+    async addUniform(
       _,
-      { uniformInput: { name, size, condition } },
+      { name, size, condition },
       context
     ) {
       const user = checkAuth(context);
@@ -41,7 +41,7 @@ module.exports = {
           await uniform.delete();
           return "Uniform deleted successfully";
         } else {
-          throw new AuthenticationError("Action not allowed");
+          throw new GraphQLError("Action not allowed");
         }
       } catch (err) {
         throw new Error(err);

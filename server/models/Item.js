@@ -13,12 +13,6 @@ const itemSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  modelNumber: {
-    type: String,
-  },
-  serialCode: {
-    type: String,
-  },
   quantity: {
     type: Number,
     default: 0,

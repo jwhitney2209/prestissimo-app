@@ -1,6 +1,4 @@
-const { AuthenticationError } = require("apollo-server");
-
-const Person = require("../../models/Person");
+const Student = require("../../models/Student");
 const Ensemble = require("../../models/Ensemble");
 const Section = require("../../models/Section");
 const Uniform = require("../../models/Uniform");
@@ -8,26 +6,26 @@ const checkAuth = require("../../utils/check-auth");
 
 module.exports = {
   Query: {
-    async getPersons(_, args, context) {
+    async getStudents(_, args, context) {
       const user = checkAuth(context);
       try {
-        const persons = await Person.find({ userId: user.id })
+        const students = await Student.find({ userId: user.id })
           .sort({
             createdAt: -1,
           })
           .populate("ensembles")
           .populate("section")
           .populate("uniforms");
-        return persons;
+        return students;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async getPerson(_, { personId }) {
+    async getStudent(_, { studentId }) {
       try {
-        const person = await Person.findById(personId);
-        if (person) {
-          return person;
+        const student = await Student.findById(studentId);
+        if (student) {
+          return student;
         } else {
           throw new Error("Student not found");
         }
@@ -35,14 +33,14 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getPersonsByEnsemble(_, { ensembleId }) {
+    async getStudentsByEnsemble(_, { ensembleId }) {
       try {
         const ensemble = await Ensemble.findById(ensembleId);
         if (ensemble) {
-          const persons = await Person.find({ ensembles: ensemble }).populate(
+          const students = await Student.find({ ensembles: ensemble }).populate(
             "section"
           );
-          return persons;
+          return students;
         } else {
           throw new Error("Ensemble not found");
         }
@@ -50,14 +48,14 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getPersonsBySection(_, { sectionId }) {
+    async getStudentsBySection(_, { sectionId }) {
       try {
         const section = await Section.findById(sectionId);
         if (section) {
-          const persons = await Person.find({ section: section }).populate(
+          const students = await Student.find({ section: section }).populate(
             "ensembles"
           );
-          return persons;
+          return students;
         } else {
           throw new Error("Section not found");
         }
@@ -65,12 +63,12 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getPersonsByUniform(_, { uniformId }) {
+    async getStudentsByUniform(_, { uniformId }) {
       try {
         const uniform = await Uniform.findById(uniformId);
         if (uniform) {
-          const persons = await Person.find({ uniforms: uniform });
-          return persons;
+          const students = await Student.find({ uniforms: uniform });
+          return students;
         } else {
           throw new Error("Uniform not found");
         }
@@ -80,13 +78,13 @@ module.exports = {
     },
   },
   Mutation: {
-    async createPerson(
+    async addStudent(
       _,
       { firstName, lastName, email, phone, grade },
       context
     ) {
       const user = checkAuth(context);
-      const newPerson = new Person({
+      const newStudent = new Student({
         firstName,
         lastName,
         email,
@@ -96,22 +94,22 @@ module.exports = {
         createdAt: new Date().toISOString(),
       });
 
-      const person = await newPerson.save();
+      const student = await newStudent.save();
 
-      return person;
+      return student;
     },
-    async deletePerson(_, { personId }, context) {
+    async deleteStudent(_, { studentId }, context) {
       try {
-        const person = await Person.findByIdAndDelete(personId);
-        return `${person.firstName} ${person.lastName} was deleted successfully.`;
+        const student = await Student.findByIdAndDelete(studentId);
+        return `${student.firstName} ${student.lastName} was deleted successfully.`;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async updatePerson(
+    async updateStudent(
       _,
       {
-        personId,
+        studentId,
         firstName,
         lastName,
         email,
@@ -122,8 +120,8 @@ module.exports = {
       context
     ) {
       try {
-        const person = await Person.findOneAndUpdate(
-          { _id: personId },
+        const student = await Student.findOneAndUpdate(
+          { _id: studentId },
           {
             $set: {
               firstName: firstName,
@@ -136,16 +134,16 @@ module.exports = {
           },
           { new: true }
         );
-        return person;
+        return student;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async assignEnsembleToPerson(_, { personId, ensembleId }, context) {
+    async assignEnsembleToStudent(_, { studentId, ensembleId }, context) {
       const ensemble = await Ensemble.findById(ensembleId);
       try {
-        const person = await Person.findOneAndUpdate(
-          { _id: personId },
+        const student = await Student.findOneAndUpdate(
+          { _id: studentId },
           {
             $push: {
               ensembles: ensemble,
@@ -153,16 +151,16 @@ module.exports = {
           },
           { new: true }
         ).populate("ensembles");
-        return person;
+        return student;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async assignSectionToPerson(_, { personId, sectionId }, context) {
+    async assignSectionToStudent(_, { studentId, sectionId }, context) {
       const section = await Section.findById(sectionId);
       try {
-        const person = await Person.findOneAndUpdate(
-          { _id: personId },
+        const student = await Student.findOneAndUpdate(
+          { _id: studentId },
           {
             $set: {
               section: section,
@@ -170,16 +168,16 @@ module.exports = {
           },
           { new: true }
         ).populate("section");
-        return person;
+        return student;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async assignUniformToPerson(_, { personId, uniformId }, context) {
+    async assignUniformToStudent(_, { studentId, uniformId }, context) {
       const uniform = await Uniform.findById(uniformId);
       try {
-        const person = await Person.findOneAndUpdate(
-          { _id: personId },
+        const student = await Student.findOneAndUpdate(
+          { _id: studentId },
           {
             $push: {
               uniforms: uniform,
@@ -187,7 +185,7 @@ module.exports = {
           },
           { new: true }
         ).populate("uniforms");
-        return person;
+        return student;
       } catch (err) {
         throw new Error(err);
       }

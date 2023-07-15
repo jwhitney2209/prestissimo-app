@@ -1,5 +1,5 @@
 const usersResolvers = require("./users");
-const personsResolvers = require("./persons");
+const studentResolvers = require("./students");
 const itemsResolvers = require("./items");
 const sectionsResolvers = require("./sections");
 const ensembleResolvers = require("./ensembles");
@@ -8,7 +8,7 @@ const uniformsResolvers = require("./uniforms");
 module.exports = {
   Query: {
     ...usersResolvers.Query,
-    ...personsResolvers.Query,
+    ...studentResolvers.Query,
     ...itemsResolvers.Query,
     ...sectionsResolvers.Query,
     ...ensembleResolvers.Query,
@@ -16,7 +16,7 @@ module.exports = {
   },
   Mutation: {
     ...usersResolvers.Mutation,
-    ...personsResolvers.Mutation,
+    ...studentResolvers.Mutation,
     ...itemsResolvers.Mutation,
     ...sectionsResolvers.Mutation,
     ...ensembleResolvers.Mutation,

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const personSchema = new mongoose.Schema({
+const studentSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -51,6 +51,6 @@ const personSchema = new mongoose.Schema({
   ]
 });
 
-const Person = mongoose.model("Person", personSchema);
+const Student = mongoose.model("Student", studentSchema);
 
-module.exports = Person;
+module.exports = Student;

@@ -28,17 +28,15 @@ module.exports = {
     },
   },
   Mutation: {
-    async createItem(
+    async addItem(
       _,
-      { itemInput: { name, description, modelNumber, serialCode, quantity } },
+      { name, description, quantity },
       context
     ) {
       const user = checkAuth(context);
       const newItem = new Item({
         name,
         description,
-        modelNumber,
-        serialCode,
         quantity,
         userId: user.id,
         createdAt: new Date().toISOString(),

@@ -20,8 +20,8 @@ mutation register($email: String!, $password: String!, $confirmPassword: String!
 }
 `;
 
-export const CREATE_PERSON = gql`
-  mutation createPerson($firstName: String!, $lastName: String!, $email: String!, $phone: String!, $grade: String!) {
+export const ADD_STUDENT = gql`
+  mutation addStudent($firstName: String!, $lastName: String!, $email: String!, $phone: String!, $grade: String!) {
     createPerson(firstName: $firstName, lastName: $lastName, email: $email, phone: $phone, grade: $grade) {
       id
       firstName
