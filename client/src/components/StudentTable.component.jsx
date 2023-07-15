@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_PERSONS_BASIC_INFO } from "../utils/queries";
+import { GET_STUDENTS } from "../utils/queries";
 
 import Spinner from "./Spinner";
 
 export default function StudentTable() {
-  const { loading, error, data } = useQuery(GET_PERSONS_BASIC_INFO);
+  const { loading, error, data } = useQuery(GET_STUDENTS);
 
   if (loading) return <Spinner />;
   if (error) return <p>Error</p>;
@@ -44,23 +44,23 @@ export default function StudentTable() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {data.getPersons.map((person) => (
-                  <tr key={person.id}>
+                {data.getStudents.map((student) => (
+                  <tr key={student.id}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                      {person.lastName}, {person.firstName}
+                      {student.lastName}, {student.firstName}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                      {person.email}
+                      {student.email}
                     </td>
                     <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                      {person.grade}
+                      {student.grade}
                     </td>
                     <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <Link
                         to="/edit"
                         className="text-white rounded-md bg-gray-800 px-4 py-2 hover:bg-gray-700"
                       >
-                        Edit<span className="sr-only">, {person.name}</span>
+                        Edit<span className="sr-only">, {student.name}</span>
                       </Link>
                     </td>
                   </tr>

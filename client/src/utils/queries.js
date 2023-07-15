@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-const GET_PERSONS_BASIC_INFO = gql`
-  query getPersons {
-  getPersons {
+const GET_STUDENTS = gql`
+  query getStudents {
+  getStudents {
     id
     firstName
     lastName
@@ -14,4 +14,4 @@ const GET_PERSONS_BASIC_INFO = gql`
 }
 `
 
-export { GET_PERSONS_BASIC_INFO }
+export { GET_STUDENTS }

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
-import { CREATE_PERSON } from "../utils/mutations";
-import { GET_PERSONS_BASIC_INFO } from "../utils/queries";
+import { ADD_STUDENT } from "../utils/mutations";
+import { GET_STUDENTS } from "../utils/queries";
 
 export default function AddStudent() {
   const navigate = useNavigate();
@@ -12,16 +12,15 @@ export default function AddStudent() {
   const [phone, setPhone] = useState("");
   const [grade, setGrade] = useState("");
 
-  const [createPerson] = useMutation(CREATE_PERSON, {
+  const [addStudent] = useMutation(ADD_STUDENT, {
     variables: { firstName, lastName, email, phone, grade },
-    refetchQueries: [{ query: GET_PERSONS_BASIC_INFO }],
+    refetchQueries: [{ query: GET_STUDENTS }],
   });
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(firstName, lastName, email, phone, grade);
 
-    createPerson(firstName, lastName, email, phone, grade);
+    addStudent(firstName, lastName, email, phone, grade);
 
     setFirstName("");
     setLastName("");
