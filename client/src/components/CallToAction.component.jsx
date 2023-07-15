@@ -3,9 +3,9 @@ import Typed from "react-typed";
 
 export default function CallToAction() {
   return (
-    <div className="bg-white">
-      <div className="mx-auto sm:px-6 sm:py-24 lg:px-8">
-        <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 text-center shadow-2xl sm:rounded-3xl sm:px-16">
+    <div className="bg-gray-900">
+      <div className="mx-auto">
+        <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 text-center shadow-2xl">
           <h2 className="mx-auto max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Work Less. Do More.
           </h2>

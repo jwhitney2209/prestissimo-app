@@ -31,7 +31,7 @@ export default function Header() {
       >
         {/* Logo */}
         <div className="flex lg:flex-1">
-          <Link to="/" className="-m-1.5 p-1.5 text-gray-900">
+          <Link to="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Prestissimo</span>
             <img src={prestissimo_logo} className="h-14 w-auto" alt="logo" />
           </Link>
@@ -42,7 +42,7 @@ export default function Header() {
             <Link
               key={item.name}
               to={item.href}
-              className="text-base font-medium hover:text-gray-700"
+              className="text-base text-gray-50 font-medium hover:text-gray-400"
             >
               {item.name}
             </Link>
@@ -52,13 +52,13 @@ export default function Header() {
         <div className="flex flex-1 items-center justify-end gap-x-6">
           <Link
             to="/signin"
-            className="hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 lg:text-white"
+            className="hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 text-gray-50"
           >
             Login
           </Link>
           <Link
             to="/signup"
-            className="rounded-md bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="rounded-md bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Sign Up
           </Link>
@@ -89,7 +89,7 @@ export default function Header() {
               </Link>
               <Link
                 to="/signup"
-                className="ml-auto rounded-md bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="ml-auto rounded-md bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign Up
               </Link>
