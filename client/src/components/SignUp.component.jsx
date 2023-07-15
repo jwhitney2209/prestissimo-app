@@ -142,7 +142,7 @@ export default function SignUpComponent() {
       {error && (
         <div className="my-4 bg-red-200 rounded-md border-0 py-3.5 px-2">
           <p className="text-red-500 text-center font-semibold">
-            An error occurred. Please try again!
+            {error.message}
           </p>
         </div>
       )}
