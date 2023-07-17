@@ -2,14 +2,14 @@ const Student = require("../../models/Student");
 const Ensemble = require("../../models/Ensemble");
 const Section = require("../../models/Section");
 const Uniform = require("../../models/Uniform");
-const checkAuth = require("../../utils/check-auth");
+const { authMiddleware } = require("../../utils/check-auth");
 
 module.exports = {
   Query: {
     async getStudents(_, args, context) {
-      const user = checkAuth(context);
+      const user = context.user;
       try {
-        const students = await Student.find({ userId: user.id })
+        const students = await Student.find({ userId: user._id })
           .sort({
             createdAt: -1,
           })
@@ -78,19 +78,15 @@ module.exports = {
     },
   },
   Mutation: {
-    async addStudent(
-      _,
-      { firstName, lastName, email, phone, grade },
-      context
-    ) {
-      const user = checkAuth(context);
+    async addStudent(_, { firstName, lastName, email, phone, grade }, context) {
+      const user = context.user;
       const newStudent = new Student({
         firstName,
         lastName,
         email,
         phone,
         grade,
-        userId: user.id,
+        userId: user._id,
         createdAt: new Date().toISOString(),
       });
 
@@ -108,15 +104,7 @@ module.exports = {
     },
     async updateStudent(
       _,
-      {
-        studentId,
-        firstName,
-        lastName,
-        email,
-        phone,
-        grade,
-        accountBalance,
-      },
+      { studentId, firstName, lastName, email, phone, grade, accountBalance },
       context
     ) {
       try {

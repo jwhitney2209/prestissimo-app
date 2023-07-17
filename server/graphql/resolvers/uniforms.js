@@ -1,13 +1,13 @@
 const Uniform = require("../../models/Uniform");
 const { GraphQLError } = require("graphql");
-const checkAuth = require("../../utils/check-auth");
+const { authMiddleware } = require("../../utils/check-auth");
 
 module.exports = {
   Query: {
     async getUniforms(_, args, context) {
-      const user = checkAuth(context);
+      const user = context.user;
       try {
-        const uniforms = await Uniform.find({ userId: user.id }).sort({
+        const uniforms = await Uniform.find({ userId: user._id }).sort({
           createdAt: -1,
         });
         return uniforms;
@@ -22,19 +22,19 @@ module.exports = {
       { name, size, condition },
       context
     ) {
-      const user = checkAuth(context);
+      const user = context.user;
       const newUniform = new Uniform({
         name,
         size,
         condition,
-        userId: user.id,
+        userId: user._id,
         createdAt: new Date().toISOString(),
       });
       const uniform = await newUniform.save();
       return uniform;
     },
     async deleteUniform(_, { uniformId }, context) {
-      const user = checkAuth(context);
+      const user = context.user;
       try {
         const uniform = await Uniform.findById(uniformId);
         if (user.id === uniform.userId) {

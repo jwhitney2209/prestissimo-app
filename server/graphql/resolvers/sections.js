@@ -1,12 +1,12 @@
 const Section = require("../../models/Section");
-const checkAuth = require("../../utils/check-auth");
+const { authMiddleware } = require("../../utils/check-auth");
 
 module.exports = {
   Query: {
     async getSections(_, args, context) {
-      const user = checkAuth(context);
+      const user = context.user;
       try {
-        const sections = await Section.find({ userId: user.id }).sort({
+        const sections = await Section.find({ userId: user._id }).sort({
           createdAt: -1,
         });
         return sections;
@@ -29,10 +29,10 @@ module.exports = {
   },
   Mutation: {
     async addSection(_, { name }, context) {
-      const user = checkAuth(context);
+      const user = context.user;
       const newSection = new Section({
         name,
-        userId: user.id,
+        userId: user._id,
         createdAt: new Date().toISOString(),
       });
       const section = await newSection.save();

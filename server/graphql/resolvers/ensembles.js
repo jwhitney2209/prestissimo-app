@@ -1,11 +1,11 @@
 const Ensemble = require("../../models/Ensemble");
 const Person = require("../../models/Student");
-const checkAuth = require("../../utils/check-auth");
+const { authMiddleware } = require("../../utils/check-auth");
 
 module.exports = {
   Query: {
     async getEnsembles(_, args, context) {
-      const user = checkAuth(context);
+      const user = context.user;;
       try {
         const ensembles = await Ensemble.find({ userId: user.id }).sort({
           createdAt: -1,
@@ -30,10 +30,10 @@ module.exports = {
   },
   Mutation: {
     async addEnsemble(_, { name }, context) {
-      const user = checkAuth(context);
+      const user = context.user;
       const newEnsemble = new Ensemble({
         name,
-        userId: user.id,
+        userId: user._id,
         createdAt: new Date().toISOString(),
       });
       const ensemble = await newEnsemble.save();
@@ -43,7 +43,7 @@ module.exports = {
       const ensemble = await Ensemble.findByIdAndDelete({ ensembleId });
       return ensemble;
     },
-    async updateEnsemble(_, { ensembleId, ensembleInput: { name } }, context) {
+    async updateEnsemble(_, { ensembleId, name }, context) {
       try {
         const ensemble = await Ensemble.findOneAndUpdate(
           { _id: ensembleId },

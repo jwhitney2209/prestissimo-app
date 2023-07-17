@@ -40,11 +40,11 @@ module.exports = gql`
   }
 
   type User {
-    id: ID!
-    email: String!
-    token: String!
-    password: String!
-    createdAt: String!
+    _id: ID
+    email: String
+    token: String
+    password: String
+    createdAt: String
   }
 
   type Uniform {
@@ -78,8 +78,8 @@ module.exports = gql`
 
   type Mutation {
     # user mutations
-    register(email: String!, password: String!, confirmPassword: String!): User!
-    login(email: String!, password: String!): User!
+    register(email: String!, password: String!, confirmPassword: String!): User
+    login(email: String!, password: String!): User
     # create
     addStudent(
       firstName: String!

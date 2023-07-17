@@ -5,6 +5,7 @@ import CallToAction from "../components/CallToAction.component.jsx";
 import About from "../components/About.component.jsx";
 import Pricing from "../components/Pricing.component.jsx";
 import Footer from "../components/Footer.component.jsx"
+import Contact from "../components/Contact.jsx";
 export default function Home() {
   return (
     <>
@@ -13,6 +14,7 @@ export default function Home() {
         <CallToAction />
         <About />
         <Pricing />
+        <Contact />
         <Footer />
       </div>
     </>
