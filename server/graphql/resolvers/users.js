@@ -11,7 +11,7 @@ const User = require("../../models/User");
 
 module.exports = {
   Query: {
-    async getUsers() {
+    async users() {
       try {
         const users = await User.find();
         return users;
@@ -19,7 +19,7 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getUser(_, { userId }) {
+    async user(_, { userId }) {
       try {
         const user = await User.findById(userId);
         if (user) {
@@ -33,27 +33,53 @@ module.exports = {
     },
   },
   Mutation: {
-    async login(_, { email, password }) {
+    async loginUser(_, { email, password }) {
       const { errors, valid } = validateLoginInput(email, password);
+
+      if (!valid) {
+        throw new GraphQLError("Errors", { errors });
+      }
+
       const user = await User.findOne({ email });
+
       if (!user) {
-        errors.general = "Email not found";
+        errors.general = "Invalid credentials";
+        throw new GraphQLError("Errors", { errors });
       }
 
       const match = await bcrypt.compare(password, user.password);
+
       if (!match) {
         errors.general = "Invalid credentials";
+        throw new GraphQLError("Errors", { errors });
       }
 
       const token = signToken(user);
 
+      // Explicitly return the user data needed by the client
       return {
-        ...user._doc,
-        _id: user._id,
         token,
+        user: {
+          id: user._id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          // add other required User fields if they are supposed to be returned upon login
+          // make sure to include the `school` and `address` if they are required fields
+        },
       };
     },
-    async register(_, { email, password, confirmPassword }) {
+    async createUser(_, args) {
+      const {
+        email,
+        password,
+        confirmPassword,
+        firstName,
+        lastName,
+        school,
+        address,
+      } = args;
+
       const { valid, errors } = validateRegisterInput(
         email,
         password,
@@ -70,20 +96,36 @@ module.exports = {
         throw new GraphQLError("This email is already taken.");
       }
 
-      const user = await User({
+      // Create a new user instance with the hashed password
+      const newUser = new User({
         email,
-        password,
-        createdAt: new Date().toISOString(),
+        password, // Password will be hashed by the pre-save middleware
+        firstName,
+        lastName,
+        school: {
+          schoolName: school.schoolName,
+          schoolAddress: {
+            street: school.schoolAddress.street,
+            city: school.schoolAddress.city,
+            state: school.schoolAddress.state,
+            zip: school.schoolAddress.zip,
+          },
+        },
+        address: {
+          street: address.street,
+          city: address.city,
+          state: address.state,
+          zip: address.zip,
+        },
       });
 
-      const res = await user.save();
+      const savedUser = await newUser.save();
 
-      const token = signToken(res);
+      const token = signToken(savedUser);
 
       return {
-        ...res._doc,
-        _id: res._id,
-        token,
+        user: savedUser,
+        token
       };
     },
   },

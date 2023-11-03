@@ -1,79 +1,140 @@
 const { gql } = require("graphql-tag");
 
 module.exports = gql`
-  type User {
-    
+  type Address {
+    street: String!
+    city: String!
+    state: String!
+    zip: String!
   }
-  type Student {
+
+  type School {
+    schoolName: String!
+    schoolAddress: Address!
+  }
+
+  type User {
     id: ID!
+    email: String!
     firstName: String!
     lastName: String!
-    createdAt: String!
+    school: School
+    address: Address
+    createdAt: String
+  }
+
+  type Student {
+    id: ID!
+    userId: String
+    firstName: String!
+    lastName: String!
     email: String
     phone: String
     grade: String
-    accountBalance: Float
-    userId: String
-    section: Section
-    ensembles: [Ensemble]
-    uniforms: [Uniform]
-  }
-
-  type Instrument {
-    id: ID!
-    name: String!
     createdAt: String!
-    userId: String!
+    instrument: String
+    classes: [Class!]
+    uniforms: [Uniform!]
   }
 
   type Class {
     id: ID!
+    userId: String
     name: String!
     createdAt: String!
-    userId: String!
   }
 
   type Uniform {
     id: ID!
+    userId: String
     category: String!
     name: String!
-    size: String!
+    size: String
+    condition: UniformCondition!
     quantity: Int!
-    condition: String
     createdAt: String!
     assignedTo: Student
-    userId: String!
   }
 
+  enum UniformCondition {
+    NEW
+    USED
+    WORN
+    DAMAGED
+  }
 
   type Query {
     # get all
-    getUsers: [User]
-    getStudents: [Student]
-    getInstruments: [Instrument]
-    getClasses: [Class]
-    getUniforms: [Uniform]
-    # get one
-    getUser(userId: ID!): User!
-    getStudent(studentId: ID!): Student!
-    getInstrument(instrumentId: ID!): Instrument!
-    getClass(classId: ID!): Class!
-    getUniform(uniformId: ID!): Uniform!
+
+    users: [User!]!
+    user(userId: ID!): User!
+    students: [Student!]!
+    student(studentId: ID!): Student
+    uniforms: [Uniform!]!
+    uniform(uniformId: ID!): Uniform
+    getClass(classId: ID!): Class
+    classes: [Class!]!
   }
 
   type Mutation {
     # file upload
     convertCSV(url: String!): String
     # user mutations
-    register(email: String!, password: String!, confirmPassword: String!): User
-    login(email: String!, password: String!): User
-    # create
-    addStudent(
+    createUser(
+      email: String!
+      password: String!
+      confirmPassword: String!
       firstName: String!
       lastName: String!
-      email: String!
-      phone: String!
-      grade: String!
-    ): Student!
+      school: SchoolInput
+      address: AddressInput
+    ): AuthPayload
+    loginUser(email: String!, password: String!): AuthPayload
+    addStudent(input: AddStudentInput!): Student!
+    deleteStudent(studentId: ID!): String!
+    updateStudent(studentId: ID!, input: AddStudentInput!): Student!
+    createClass(input: ClassInput!): Class!
+    createUniform(input: UniformInput!): Uniform!
+  }
+
+  input AddressInput {
+    street: String!
+    city: String!
+    state: String!
+    zip: String!
+  }
+
+  input SchoolInput {
+    schoolName: String!
+    schoolAddress: AddressInput!
+  }
+
+  input AddStudentInput {
+    firstName: String!
+    lastName: String!
+    email: String
+    phone: String
+    grade: String
+    instrument: String
+    classIds: [ID!]
+    uniformIds: [ID!]
+  }
+
+
+  input UniformInput {
+    category: String!
+    name: String!
+    size: String
+    condition: UniformCondition!
+    quantity: Int
+  }
+
+  input ClassInput {
+    name: String!
+  }
+
+  type AuthPayload {
+    token: String!
+    user: User!
   }
 `;

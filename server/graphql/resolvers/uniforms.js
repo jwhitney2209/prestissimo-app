@@ -4,7 +4,7 @@ const { authMiddleware } = require("../../utils/check-auth");
 
 module.exports = {
   Query: {
-    async getUniforms(_, args, context) {
+    async uniforms(_, args, context) {
       const user = context.user;
       try {
         const uniforms = await Uniform.find({ userId: user._id })
@@ -17,7 +17,7 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getUniform(_, { uniformId }, context) {
+    async uniform(_, { uniformId }, context) {
       try {
         const uniform = await Uniform.findById(uniformId).populate(
           "assignedTo"
@@ -31,7 +31,7 @@ module.exports = {
   },
 
   Mutation: {
-    async addUniform(
+    async createUniform(
       _,
       { category, name, size, condition, quantity },
       context
@@ -54,30 +54,30 @@ module.exports = {
 
       return insertedUniforms;
     },
-    async deleteUniform(_, { uniformId }, context) {
-      // delete uniform by id without auth
-      try {
-        const uniform = await Uniform.findByIdAndDelete(uniformId);
-        return "Uniform deleted successfully";
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    // assign student to uniform
-    async assignStudentToUniform(_, { studentId, uniformId }, context) {
-      const user = context.user;
-      try {
-        const uniform = await Uniform.findById(uniformId);
-        if (user.id === uniform.userId) {
-          uniform.assignedTo = studentId;
-          await uniform.save();
-          return uniform;
-        } else {
-          throw new GraphQLError("Action not allowed");
-        }
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
+    // async deleteUniform(_, { uniformId }, context) {
+    //   // delete uniform by id without auth
+    //   try {
+    //     const uniform = await Uniform.findByIdAndDelete(uniformId);
+    //     return "Uniform deleted successfully";
+    //   } catch (err) {
+    //     throw new Error(err);
+    //   }
+    // },
+    // // assign student to uniform
+    // async assignStudentToUniform(_, { studentId, uniformId }, context) {
+    //   const user = context.user;
+    //   try {
+    //     const uniform = await Uniform.findById(uniformId);
+    //     if (user.id === uniform.userId) {
+    //       uniform.assignedTo = studentId;
+    //       await uniform.save();
+    //       return uniform;
+    //     } else {
+    //       throw new GraphQLError("Action not allowed");
+    //     }
+    //   } catch (err) {
+    //     throw new Error(err);
+    //   }
+    // },
   },
 };

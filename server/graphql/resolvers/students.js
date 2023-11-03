@@ -5,7 +5,7 @@ const fs = require("fs");
 
 module.exports = {
   Query: {
-    async getStudents(_, args, context) {
+    async students(_, args, context) {
       const user = context.user;
       try {
         const students = await Student.find({ userId: user._id })
@@ -13,21 +13,19 @@ module.exports = {
             createdAt: -1,
           })
           .populate("classes")
-          .populate("instrument")
           .populate("uniforms");
         return students;
       } catch (err) {
         throw new Error(err);
       }
     },
-    async getStudent(_, { studentId }) {
+    async student(_, { studentId }) {
       try {
         const student = await Student.findById(studentId)
           .populate("classes")
-          .populate("instrument")
           .populate("uniforms");
         if (student) {
-          console.log(student)
+          console.log(student);
           return student;
         } else {
           throw new Error("Student not found");
@@ -38,19 +36,47 @@ module.exports = {
     },
   },
   Mutation: {
-    async addStudent(_, { firstName, lastName, email, phone, grade }, context) {
+    async addStudent(_, { input }, context) {
       const user = context.user;
-      const newStudent = new Student({
+
+      if (!user) {
+        throw new Error("You must be logged in to perform this action.");
+      }
+
+      // Destructure the input object to extract the properties
+      const {
         firstName,
         lastName,
         email,
         phone,
         grade,
-        userId: user._id,
-        createdAt,
+        instrument,
+        classIds,
+        uniformIds,
+      } = input;
+
+      const newStudent = new Student({
+        userId: user._id, // Assuming context.user._id is the ID of the authenticated user
+        firstName,
+        lastName,
+        email,
+        phone,
+        grade,
+        instrument,
+        classes: classIds, // This expects an array of class IDs
+        uniforms: uniformIds, // This expects an array of uniform IDs
       });
 
+      // Save the new student to the database
       const student = await newStudent.save();
+
+      // Populate the student with related documents if needed
+      // If you need the full objects of instrument, classes, or uniforms, you can populate them here
+      // For example:
+      // await student
+      //   .populate("instrument")
+      //   .populate("classes")
+      //   .populate("uniforms");
 
       return student;
     },
@@ -62,21 +88,38 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async updateStudent(
-      _,
-      { studentId, firstName, lastName, email, phone, grade },
-      context
-    ) {
+    async updateStudent(_, { studentId, input }, context) {
+      const user = context.user;
+
+      if (!user) {
+        throw new Error("You must be logged in to perform this action.");
+      }
+
+      // Destructure the input object to extract the properties
+      const {
+        firstName,
+        lastName,
+        email,
+        phone,
+        grade,
+        instrument,
+        classIds,
+        uniformIds,
+      } = input;
+
       try {
         const student = await Student.findOneAndUpdate(
           { _id: studentId },
           {
             $set: {
-              firstName: firstName,
-              lastName: lastName,
-              email: email,
-              phone: phone,
-              grade: grade,
+              firstName,
+              lastName,
+              email,
+              phone,
+              grade,
+              instrument,
+              classes: classIds, // This expects an array of class IDs
+              uniforms: uniformIds, // This expects an array of uniform IDs
             },
           },
           { new: true }
@@ -86,6 +129,5 @@ module.exports = {
         throw new Error(err);
       }
     },
-
   },
 };

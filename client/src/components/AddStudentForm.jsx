@@ -13,7 +13,7 @@ const initialState = {
   instrument: "",
 }
 
-export default function AddStudent() {
+export default function AddStudentForm() {
   const navigate = useNavigate();
   const [formState, setFormState] = useState({
     firstName: "",

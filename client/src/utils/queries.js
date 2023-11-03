@@ -1,16 +1,19 @@
 import { gql } from "@apollo/client";
 
 const GET_STUDENTS = gql`
-  query getStudents {
-    getStudents {
-      id
-      firstName
-      lastName
-      grade
-      email
-      phone
-    }
+query students {
+  students {
+    id
+    firstName
+    lastName
+    userId
+    email
+    grade
+    instrument
+    phone
+    createdAt
   }
+}
 `;
 
 const GET_STUDENT = gql`

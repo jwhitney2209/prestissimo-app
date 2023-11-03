@@ -31,8 +31,8 @@ const studentSchema = new mongoose.Schema({
     default: Date.now,
   },
   instrument: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Instrument",
+    type: String,
+    trim: true,
   },
   classes: [
     {
