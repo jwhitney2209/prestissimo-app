@@ -243,11 +243,7 @@ module.exports = {
       await UserVerification.findByIdAndRemove(userVerification._id);
 
       // Sign a new token for the now verified user
-      const newToken = jwt.sign(
-        { id: user.id, email: user.email },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' } // Adjust the expiry time as per your requirements
-      );
+      const newToken = signToken(user);
 
       // Return the AuthPayload with the new token and the verified user
       return {
