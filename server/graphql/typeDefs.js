@@ -19,6 +19,7 @@ module.exports = `#graphql
     school: School
     address: Address
     createdAt: String
+    isVerified: Boolean!
   }
 
   type Student {
