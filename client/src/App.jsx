@@ -20,6 +20,7 @@ import AddUniform from "./pages/AddUniform";
 import SingleStudent from "./pages/SingleStudent";
 import ImportStudent from "./pages/ImportStudent";
 import AssignUniform from "./pages/AssignUniform";
+import Verify from "./pages/Verify";
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -97,6 +98,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/verify/:token" element={<Verify />} />
           </>
         )}
       </Routes>
