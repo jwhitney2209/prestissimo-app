@@ -1,6 +1,4 @@
-const { gql } = require("graphql-tag");
-
-module.exports = gql`
+module.exports = `#graphql
   type Address {
     street: String!
     city: String!
@@ -64,12 +62,10 @@ module.exports = gql`
   }
 
   type Query {
-    # get all
-
     users: [User!]!
     user(userId: ID!): User!
-    students: [Student!]!
-    student(studentId: ID!): Student
+    getStudents: [Student!]!
+    getStudent(studentId: ID!): Student
     uniforms: [Uniform!]!
     uniform(uniformId: ID!): Uniform
     getClass(classId: ID!): Class
@@ -90,6 +86,7 @@ module.exports = gql`
       address: AddressInput
     ): AuthPayload
     loginUser(email: String!, password: String!): AuthPayload
+    verifyUser(token: String!): AuthPayload
     addStudent(input: AddStudentInput!): Student!
     deleteStudent(studentId: ID!): String!
     updateStudent(studentId: ID!, input: AddStudentInput!): Student!
