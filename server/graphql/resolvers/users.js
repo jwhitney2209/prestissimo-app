@@ -46,6 +46,7 @@ const setupTransporter = async () => {
       clientSecret: process.env.CLIENT_SECRET,
       refreshToken: process.env.REFRESH_TOKEN,
     },
+    // TURN THIS OFF IF YOU ARE NOT USING A TRUSTED CERTIFICATE - ONLY IN DEVELOPMENT WITH TRUSTED SERVER
     tls: {
       rejectUnauthorized: false,
     }
@@ -198,6 +199,7 @@ module.exports = {
 
       await newUserVerification.save();
 
+      // Update the host with your frontend URL
       const host = "http://localhost:3000"
 
       await sendVerificationEmail(savedUser, host, verificationToken);
