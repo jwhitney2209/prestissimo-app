@@ -23,9 +23,21 @@ export const REGISTER_USER = gql`
     ) {
       _id
       email
-      token
     }
   }
+`;
+
+export const VERIFY_USER = gql`
+mutation verifyUser($token: String!) {
+  verifyUser(token: $token) {
+    user {
+      id
+      firstName
+      lastName
+    }
+    token
+  }
+}
 `;
 
 export const ADD_STUDENT = gql`
