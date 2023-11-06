@@ -131,6 +131,9 @@ module.exports = {
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
+          isVerified: user.isVerified,
+          school: user.school,
+          address: user.address,
           // add other required User fields if they are supposed to be returned upon login
           // make sure to include the `school` and `address` if they are required fields
         },
@@ -188,9 +191,7 @@ module.exports = {
       });
 
       const savedUser = await newUser.save();
-
-      console.log(savedUser._id)
-
+      
       const verificationToken = uuidv4();
       const newUserVerification = new UserVerification({
         userId: newUser._id,
@@ -248,7 +249,17 @@ module.exports = {
       // Return the AuthPayload with the new token and the verified user
       return {
         token: newToken,
-        user,
+        user: {
+          id: user._id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isVerified: user.isVerified,
+          school: user.school,
+          address: user.address,
+          // add other required User fields if they are supposed to be returned upon login
+          // make sure to include the `school` and `address` if they are required fields
+        },
       };
     },
   },
