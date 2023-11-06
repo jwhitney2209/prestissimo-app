@@ -34,6 +34,9 @@ const server = new ApolloServer({
     origin: "*",
     credentials: true,
   },
+  context: ({ req }) => {
+    return { req };
+  },
 });
 
 const startApolloServer = async () => {

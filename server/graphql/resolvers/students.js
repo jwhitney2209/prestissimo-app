@@ -5,8 +5,14 @@ const fs = require("fs");
 
 module.exports = {
   Query: {
-    async students(_, args, context) {
+    async getStudents(_, args, context) {
       const user = context.user;
+
+      
+      if (!user) {
+        throw new Error("You must be logged in to perform this action.");
+      }
+
       try {
         const students = await Student.find({ userId: user._id })
           .sort({
@@ -19,7 +25,14 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async student(_, { studentId }) {
+    async getStudent(_, { studentId }, context) {
+      const user = context.user;
+
+      
+      if (!user) {
+        throw new Error("You must be logged in to perform this action.");
+      }
+      
       try {
         const student = await Student.findById(studentId)
           .populate("classes")
