@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../utils/mutations";
 
@@ -8,8 +8,9 @@ import p_logo_dark from "../assets/p_logo_dark.svg";
 import Auth from "../utils/auth";
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const [formState, setFormState] = useState({ email: "", password: "" });
-  const [login, { error }] = useMutation(LOGIN_USER);
+  const [loginUser, { error }] = useMutation(LOGIN_USER);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -19,14 +20,14 @@ export default function SignIn() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await login({
+      const { data } = await loginUser({
         variables: {
           email: formState.email,
           password: formState.password,
         },
       });
-      const token = data.login.token;
-      Auth.login(token);
+      const token = data.loginUser.token;
+      Auth.login(token, navigate);
 
       setFormState({
         email: "",

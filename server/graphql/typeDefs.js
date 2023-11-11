@@ -1,21 +1,21 @@
 module.exports = `#graphql
   type Address {
-    street: String!
-    city: String!
-    state: String!
-    zip: String!
+    street: String
+    city: String
+    state: String
+    zip: String
   }
 
   type School {
-    schoolName: String!
-    schoolAddress: Address!
+    schoolName: String
+    schoolAddress: Address
   }
 
   type User {
     id: ID!
     email: String!
-    firstName: String!
-    lastName: String!
+    firstName: String
+    lastName: String
     school: School
     address: Address
     createdAt: String
@@ -81,8 +81,8 @@ module.exports = `#graphql
       email: String!
       password: String!
       confirmPassword: String!
-      firstName: String!
-      lastName: String!
+      firstName: String
+      lastName: String
       school: SchoolInput
       address: AddressInput
     ): AuthPayload
@@ -96,15 +96,15 @@ module.exports = `#graphql
   }
 
   input AddressInput {
-    street: String!
-    city: String!
-    state: String!
-    zip: String!
+    street: String
+    city: String
+    state: String
+    zip: String
   }
 
   input SchoolInput {
-    schoolName: String!
-    schoolAddress: AddressInput!
+    schoolName: String
+    schoolAddress: AddressInput
   }
 
   input AddStudentInput {

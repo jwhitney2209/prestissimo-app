@@ -61,13 +61,13 @@ setupTransporter().catch(console.error);
 const sendVerificationEmail = async (user, host, verificationToken) => {
   let transporter = await setupTransporter();
 
-  const verificationUrl = `${host}/verify?token=${verificationToken}`;
+  const verificationUrl = `${host}/verify/${verificationToken}`;
 
   let mailOptions = {
     from: process.env.AUTH_EMAIL,
     to: user.email,
     subject: "Please verify your email address",
-    html: `<p>Hi ${user.firstName},</p>
+    html: `<p>Hi,</p>
     <p>Please click on the following link to verify your account:</p>
     <a href="${verificationUrl}">${verificationUrl}</a>
     <p>If you did not request this, please ignore this email.</p>`,
@@ -111,14 +111,18 @@ module.exports = {
 
       if (!user) {
         errors.general = "Invalid credentials";
-        throw new GraphQLError("Errors", { errors });
+        throw new GraphQLError("We do not recognize that email/password.", { errors });
       }
 
       const match = await bcrypt.compare(password, user.password);
 
       if (!match) {
         errors.general = "Invalid credentials";
-        throw new GraphQLError("Errors", { errors });
+        throw new GraphQLError("We do not recognize that email/password.", { errors });
+      }
+
+      if (!user.isVerified) {
+        throw new GraphQLError("Your email address has not been verified. Please check your email for a verification link.");
       }
 
       const token = signToken(user);
@@ -126,17 +130,7 @@ module.exports = {
       // Explicitly return the user data needed by the client
       return {
         token,
-        user: {
-          id: user._id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          isVerified: user.isVerified,
-          school: user.school,
-          address: user.address,
-          // add other required User fields if they are supposed to be returned upon login
-          // make sure to include the `school` and `address` if they are required fields
-        },
+        user: user,
       };
     },
     async createUser(_, args) {
@@ -144,10 +138,6 @@ module.exports = {
         email,
         password,
         confirmPassword,
-        firstName,
-        lastName,
-        school,
-        address,
       } = args;
 
       const { valid, errors } = validateRegisterInput(
@@ -170,24 +160,7 @@ module.exports = {
       const newUser = new User({
         email,
         password, // Password will be hashed by the pre-save middleware
-        firstName,
-        lastName,
         isVerified: false,
-        school: {
-          schoolName: school.schoolName,
-          schoolAddress: {
-            street: school.schoolAddress.street,
-            city: school.schoolAddress.city,
-            state: school.schoolAddress.state,
-            zip: school.schoolAddress.zip,
-          },
-        },
-        address: {
-          street: address.street,
-          city: address.city,
-          state: address.state,
-          zip: address.zip,
-        },
       });
 
       const savedUser = await newUser.save();
@@ -204,11 +177,9 @@ module.exports = {
       const host = "http://localhost:3000"
 
       await sendVerificationEmail(savedUser, host, verificationToken);
-      // const token = signToken(savedUser);
 
       return {
         user: savedUser,
-        // token,
       };
     },
     async verifyUser(_, { token }) {
@@ -249,17 +220,7 @@ module.exports = {
       // Return the AuthPayload with the new token and the verified user
       return {
         token: newToken,
-        user: {
-          id: user._id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          isVerified: user.isVerified,
-          school: user.school,
-          address: user.address,
-          // add other required User fields if they are supposed to be returned upon login
-          // make sure to include the `school` and `address` if they are required fields
-        },
+        user: user,
       };
     },
   },

@@ -23,10 +23,15 @@ class AuthService {
     return localStorage.getItem('id_token');
   }
 
-  login(idToken) {
+  login(idToken, onNavigate) {
     localStorage.setItem('id_token', idToken);
-
-    window.location.assign('/');
+    // delay navigation
+    setTimeout(() => {
+      if (typeof onNavigate === 'function') {
+        onNavigate('/dashboard');
+      }
+    }, 5000)
+    
   }
 
   logout() {

@@ -1,59 +1,77 @@
 import { gql } from "@apollo/client";
 
 export const LOGIN_USER = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      _id
+mutation loginUser($email: String!, $password: String!) {
+  loginUser(email: $email, password: $password) {
+    token
+    user {
+      id
       email
-      token
+      createdAt
+      isVerified
     }
   }
+}
 `;
 
 export const REGISTER_USER = gql`
-  mutation register(
+  mutation createUser(
     $email: String!
     $password: String!
     $confirmPassword: String!
+    $firstName: String!
+    $lastName: String!
+    $school: SchoolInput
+    $address: AddressInput
   ) {
-    register(
+    createUser(
       email: $email
       password: $password
       confirmPassword: $confirmPassword
+      firstName: $firstName
+      lastName: $lastName
+      school: $school
+      address: $address
     ) {
-      _id
-      email
+      user {
+        id
+        email
+        isVerified
+      }
     }
   }
 `;
 
 export const VERIFY_USER = gql`
-mutation verifyUser($token: String!) {
-  verifyUser(token: $token) {
-    user {
-      id
-      firstName
-      lastName
+  mutation verifyUser($token: String!) {
+    verifyUser(token: $token) {
+      user {
+        id
+        firstName
+        lastName
+        createdAt
+        email
+        isVerified
+      }
+      token
     }
-    token
   }
-}
 `;
 
 export const ADD_STUDENT = gql`
-mutation addStudent($input: AddStudentInput!) {
-  addStudent(input: $input) {
-    id
-    firstName
-    lastName
-    userId
-    grade
-    phone
-    email
-    createdAt
-    instrument
+  mutation addStudent($input: AddStudentInput!) {
+    addStudent(input: $input) {
+      id
+      firstName
+      lastName
+      userId
+      grade
+      phone
+      email
+      createdAt
+      instrument
+    }
   }
-}
 `;
 
 export const DELETE_STUDENT = gql`
@@ -63,72 +81,72 @@ export const DELETE_STUDENT = gql`
 `;
 
 export const UPDATE_STUDENT = gql`
-  mutation updateStudent(
-    $studentId: ID!
-    $firstName: String!
-    $lastName: String!
-    $email: String!
-    $phone: String!
-    $grade: String!
-  ) {
-    updateStudent(
-      studentId: $studentId
-      firstName: $firstName
-      lastName: $lastName
-      email: $email
-      phone: $phone
-      grade: $grade
-    ) {
-      firstName
-      lastName
-      email
-      phone
-      grade
-    }
-  }
-`;
-
-export const ADD_UNIFORM = gql`
-mutation addUniform($category: String!, $name: String!, $size: String!, $quantity: Int) {
-  addUniform(category: $category, name: $name, size: $size, quantity: $quantity) {
-    id
-    category
-    name
-    size
-    quantity
-  }
-}
-`;
-
-export const ADD_UNIFORM_CATEGORY = gql`
-mutation Mutation($categoryName: String!) {
-  addUniformCategory(categoryName: $categoryName) {
-    id
-    categoryName
-    createdAt
-    userId
-  }
-}
-`;
-
-export const ASSIGN_UNIFORM_TO_STUDENT = gql`
-mutation assignUniformToStudent($studentId: ID!, $uniformId: ID!) {
-  assignUniformToStudent(studentId: $studentId, uniformId: $uniformId) {
+mutation updateStudent($studentId: ID!, $input: AddStudentInput!) {
+  updateStudent(studentId: $studentId, input: $input) {
     id
     firstName
     lastName
-    uniforms {
+    email
+    phone
+    grade
+    instrument
+  }
+}
+`;
+
+export const ADD_UNIFORM = gql`
+  mutation addUniform(
+    $category: String!
+    $name: String!
+    $size: String!
+    $quantity: Int
+  ) {
+    addUniform(
+      category: $category
+      name: $name
+      size: $size
+      quantity: $quantity
+    ) {
       id
+      category
       name
       size
+      quantity
     }
   }
-}`;
+`;
+
+export const ADD_UNIFORM_CATEGORY = gql`
+  mutation Mutation($categoryName: String!) {
+    addUniformCategory(categoryName: $categoryName) {
+      id
+      categoryName
+      createdAt
+      userId
+    }
+  }
+`;
+
+export const ASSIGN_UNIFORM_TO_STUDENT = gql`
+  mutation assignUniformToStudent($studentId: ID!, $uniformId: ID!) {
+    assignUniformToStudent(studentId: $studentId, uniformId: $uniformId) {
+      id
+      firstName
+      lastName
+      uniforms {
+        id
+        name
+        size
+      }
+    }
+  }
+`;
 
 export const DELETE_UNIFORM = gql`
-mutation deleteUniform($uniformId: ID!) {
-  deleteUniform(uniformId: $uniformId)
-}`
+  mutation deleteUniform($uniformId: ID!) {
+    deleteUniform(uniformId: $uniformId)
+  }
+`;
 
 export const CONVERT_CSV_TO_JSON = gql`
   mutation convertCSV($url: String!) {

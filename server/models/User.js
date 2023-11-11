@@ -4,22 +4,18 @@ const bcrypt = require("bcrypt");
 const addressSchema = new mongoose.Schema({
   street: {
     type: String,
-    required: true,
     trim: true,
   },
   city: {
       type: String,
-      required: true,
       trim: true,
   },
   state: {
       type: String,
-      required: true,
       trim: true,
   },
   zip: {
       type: String,
-      required: true,
       trim: true,
   },
 });
@@ -27,7 +23,6 @@ const addressSchema = new mongoose.Schema({
 const schoolSchema = new mongoose.Schema({
   schoolName: {
     type: String,
-    required: true,
     trim: true,
   },
   schoolAddress: addressSchema,
@@ -49,12 +44,10 @@ const userSchema = new mongoose.Schema({
   },
   firstName: {
       type: String,
-      required: true,
       trim: true,
   },
   lastName: {
       type: String,
-      required: true,
       trim: true,
   },
   school: schoolSchema,

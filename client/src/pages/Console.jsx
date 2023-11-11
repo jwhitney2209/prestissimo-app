@@ -18,17 +18,17 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 const navigation = [
   {
     name: "Dashboard",
-    href: "/",
+    href: "/dashboard",
     icon: HomeIcon,
   },
   {
     name: "Students",
-    href: "/students",
+    href: "students",
     icon: AcademicCapIcon,
   },
   {
     name: "Uniforms",
-    href: "/uniforms",
+    href: "uniforms",
     icon: ArchiveBoxIcon,
   },
 ];
