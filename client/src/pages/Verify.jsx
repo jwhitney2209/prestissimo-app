@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useMutation } from "@apollo/client";
 import { VERIFY_USER } from "../utils/mutations";
 import { useEffect, useState } from "react";
