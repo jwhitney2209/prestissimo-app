@@ -1,41 +1,13 @@
-import { useState, Fragment, useEffect } from "react";
-import { useMutation } from "@apollo/client";
-import { Transition, Dialog } from "@headlessui/react";
-import { ADD_STUDENT } from "../utils/mutations";
-import { GET_STUDENTS } from "../utils/queries";
-
-import { Link, Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import StudentTable from "../components/StudentTable";
 
 export default function Students() {
-  const [open, setOpen] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [grade, setGrade] = useState("");
-
   useEffect(() => {
     document.title = "Students";
   }, []);
 
-  const [addStudent] = useMutation(ADD_STUDENT, {
-    variables: { firstName, lastName, email, phone, grade },
-    refetchQueries: [{ query: GET_STUDENTS }],
-  });
-
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-
-    addStudent(firstName, lastName, email, phone, grade);
-
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPhone("");
-    setGrade("");
-  };
   return (
     <>
       <div className="border-b border-gray-200 pb-5 sm:flex sm:items-center sm:justify-between">

@@ -6,18 +6,21 @@ import { Routes, Route } from "react-router-dom";
 
 import PrivateRoute from "./components/PrivateRoute";
 import Home from "./pages/Home";
-import SignIn from "./pages/Login";
-import SignUp from "./pages/SignUp";
 import Console from "./pages/Console";
 import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
-import Uniforms from "./pages/Uniforms";
-import AddStudent from "./pages/AddStudent";
+
 import AddUniform from "./pages/AddUniform";
 import SingleStudent from "./pages/SingleStudent";
 import ImportStudent from "./pages/ImportStudent";
 import AssignUniform from "./pages/AssignUniform";
 import Verify from "./pages/Verify";
+// Pages Imports
+import Uniforms from "./pages/Uniforms";
+// Components Imports
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
+import AddStudentForm from "./components/AddStudentForm";
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -76,7 +79,7 @@ function App() {
           {/* Nesting add-student inside students */}
           <Route path="students" element={<Students />} />
           <Route path="students/:id" element={<SingleStudent />} />
-          <Route path="students/add" element={<AddStudent />} />
+          <Route path="students/add" element={<AddStudentForm />} />
           <Route path="students/import" element={<ImportStudent />} />
 
           <Route path="add-uniform" element={<AddUniform />} />

@@ -7,7 +7,7 @@ import p_logo_dark from "../assets/p_logo_dark.svg";
 
 import Auth from "../utils/auth";
 
-export default function SignUpComponent() {
+export default function SignUp() {
   const [formState, setFormState] = useState({
     email: "",
     password: "",

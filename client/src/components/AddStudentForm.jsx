@@ -69,7 +69,7 @@ export default function AddStudentForm() {
               New Student
             </h2>
             <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
-              Use a permanent address where you can receive mail.
+              Hello a permanent address where you can receive mail.
             </p>
 
             <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
@@ -176,7 +176,7 @@ export default function AddStudentForm() {
         </div>
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <Link
-            to="/"
+            to="/dashboard/students"
             type="button"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
