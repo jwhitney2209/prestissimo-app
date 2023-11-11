@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import StudentTable from "../components/StudentTable";
+import StudentTable from "../components/students/StudentTable";
 
 export default function Students() {
   useEffect(() => {

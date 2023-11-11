@@ -4,23 +4,24 @@ import { setContext } from "@apollo/client/link/context";
 
 import { Routes, Route } from "react-router-dom";
 
-import PrivateRoute from "./components/PrivateRoute";
+
+
+// Pages Imports
 import Home from "./pages/Home";
 import Console from "./pages/Console";
 import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
-
+import Uniforms from "./pages/Uniforms";
 import AddUniform from "./pages/AddUniform";
-import SingleStudent from "./pages/SingleStudent";
-import ImportStudent from "./pages/ImportStudent";
 import AssignUniform from "./pages/AssignUniform";
 import Verify from "./pages/Verify";
-// Pages Imports
-import Uniforms from "./pages/Uniforms";
 // Components Imports
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
-import AddStudentForm from "./components/AddStudentForm";
+import PrivateRoute from "./components/PrivateRoute";
+import SignIn from "./components/landing-page/SignIn";
+import SignUp from "./components/landing-page/SignUp";
+import Student from "./components/students/Student";
+import AddStudentForm from "./components/students/AddStudentForm";
+import UploadStudents from "./components/students/UploadStudents";
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -78,13 +79,12 @@ function App() {
           <Route index element={<Dashboard />} />
           {/* Nesting add-student inside students */}
           <Route path="students" element={<Students />} />
-          <Route path="students/:id" element={<SingleStudent />} />
+          <Route path="students/:id" element={<Student />} />
           <Route path="students/add" element={<AddStudentForm />} />
-          <Route path="students/import" element={<ImportStudent />} />
+          <Route path="students/import" element={<UploadStudents />} />
 
           <Route path="add-uniform" element={<AddUniform />} />
           <Route path="assign-uniform/:id" element={<AssignUniform />} />
-          <Route path="students/import-students" element={<ImportStudent />} />
           <Route path="uniforms" element={<Uniforms />} />
         </Route>
       </Routes>

@@ -3,7 +3,7 @@ import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
-import prestissimo_logo from "../assets/prestissimo_logo.svg";
+import prestissimo_logo from "../../assets/prestissimo_logo.svg";
 
 const navigation = [
   {

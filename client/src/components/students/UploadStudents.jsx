@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { CONVERT_CSV_TO_JSON } from "../utils/mutations";
+import { CONVERT_CSV_TO_JSON } from "../../utils/mutations";
 import { useNavigate } from "react-router-dom";
-import { GET_STUDENTS } from "../utils/queries";
+import { GET_STUDENTS } from "../../utils/queries";
 
 export default function UploadStudents() {
   const navigate = useNavigate();

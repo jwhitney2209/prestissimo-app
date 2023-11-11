@@ -7,11 +7,9 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import Auth from "../utils/auth";
 
 export default function Verify() {
-  console.log("verify page visited");
   const navigate = useNavigate();
   const { token } = useParams();
   const [verifyUser, { loading, error, data }] = useMutation(VERIFY_USER);
-  const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -22,12 +20,7 @@ export default function Verify() {
       }).then((response) => {
         if (response.data && response.data.verifyUser) {
           const newToken = response.data.verifyUser.token;
-          Auth.login(newToken, navigate);
-
-          setIsRedirecting(true);
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 5000);
+          Auth.verify(newToken, navigate);
         }
       });
     }

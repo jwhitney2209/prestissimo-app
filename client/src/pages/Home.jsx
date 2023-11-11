@@ -1,9 +1,9 @@
-import Header from "../components/Header";
-import CallToAction from "../components/CallToAction";
-import About from "../components/About";
-import Pricing from "../components/Pricing";
-import Footer from "../components/Footer";
-import Contact from "../components/Contact.jsx";
+import Header from "../components/landing-page/Header";
+import CallToAction from "../components/landing-page/CallToAction";
+import About from "../components/landing-page/About";
+import Pricing from "../components/landing-page/Pricing";
+import Footer from "../components/landing-page/Footer";
+import Contact from "../components/landing-page/Contact.jsx";
 export default function Home() {
   return (
     <>

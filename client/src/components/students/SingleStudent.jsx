@@ -1,32 +1,40 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_STUDENT } from "../utils/queries";
+import { GET_STUDENT } from "../../utils/queries";
 import { FaEdit } from "react-icons/fa";
 
-import EditSingleStudent from "./EditSingleStudent";
+import EditStudent from "./EditStudent";
 import DeleteStudentButton from "./DeleteStudentButton";
-import Spinner from "./Spinner";
+import Spinner from "../Spinner";
 
-export default function Student() {
+export default function SingleStudent() {
+  // use the id parameter from the route to query the database for a single student
   const { id } = useParams();
   const { loading, error, data } = useQuery(GET_STUDENT, {
     variables: { studentId: id },
   });
 
+
+  // memoize the student data so it doesn't get overwritten when the page title is set
   const student = useMemo(() => data?.getStudent || {}, [data]);
 
+  // set the page title to the student's name
   useEffect(() => {
     const originalTitle = document.title;
 
+    // if the student data is loaded, set the page title to the student's name
     if (!loading && student) {
       document.title = `${originalTitle} | ${student.firstName} ${student.lastName}`;
     }
 
+    // reset the page title when the component unmounts
     return () => {
       document.title = originalTitle;
     };
   }, [loading, student]);
+
+  // state hooks for managing input box visibility
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEdit = () => {
@@ -46,7 +54,7 @@ export default function Student() {
         <>
           {isEditing ? (
             <>
-              <EditSingleStudent student={student} onSubmit={handleSave} />
+              <EditStudent student={student} onSubmit={handleSave} />
             </>
           ) : (
             <>
@@ -123,7 +131,7 @@ export default function Student() {
                       </span>
                     </dd>
                   </div>
-
+                
                   <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                     <dt className="text-sm font-medium leading-6 text-gray-900">
                       Uniforms

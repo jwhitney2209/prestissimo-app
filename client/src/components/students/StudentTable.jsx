@@ -2,9 +2,9 @@
 
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_STUDENTS } from "../utils/queries";
+import { GET_STUDENTS } from "../../utils/queries";
 
-import Spinner from "./Spinner";
+import Spinner from "../Spinner";
 
 export default function StudentTable() {
   const { loading, error, data } = useQuery(GET_STUDENTS);

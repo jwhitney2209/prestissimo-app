@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { GET_STUDENTS } from "../utils/queries";
-import { DELETE_STUDENT } from "../utils/mutations";
+import { GET_STUDENTS } from "../../utils/queries";
+import { DELETE_STUDENT } from "../../utils/mutations";
 
 import { FaTrash } from "react-icons/fa";
 // eslint-disable-next-line

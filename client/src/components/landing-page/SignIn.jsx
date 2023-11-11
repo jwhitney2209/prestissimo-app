@@ -1,19 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { REGISTER_USER } from "../utils/mutations";
+import { LOGIN_USER } from "../../utils/mutations";
 
-import p_logo_dark from "../assets/p_logo_dark.svg";
+import p_logo_dark from "../../assets/p_logo_dark.svg";
 
-import Auth from "../utils/auth";
+import Auth from "../../utils/auth";
 
-export default function SignUp() {
-  const [formState, setFormState] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [register, { error }] = useMutation(REGISTER_USER);
+export default function SignIn() {
+  const navigate = useNavigate();
+  const [formState, setFormState] = useState({ email: "", password: "" });
+  const [loginUser, { error }] = useMutation(LOGIN_USER);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -23,21 +20,24 @@ export default function SignUp() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await register({
-        variables: { ...formState },
+      const { data } = await loginUser({
+        variables: {
+          email: formState.email,
+          password: formState.password,
+        },
       });
-      const token = data.register.token;
-      Auth.login(token);
+      const token = data.loginUser.token;
+      Auth.login(token, navigate);
 
       setFormState({
         email: "",
         password: "",
-        confirmPassword: "",
       });
     } catch (e) {
       console.log(e);
     }
   };
+
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -49,7 +49,7 @@ export default function SignUp() {
           />
         </Link>
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Create your account to get started
+          Sign in to your account
         </h2>
       </div>
 
@@ -85,10 +85,10 @@ export default function SignUp() {
                 Password
               </label>
               {/* <div className="text-sm">
-                <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                  Forgot password?
-                </a>
-              </div> */}
+                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                    Forgot password?
+                  </a>
+                </div> */}
             </div>
             <div className="mt-2">
               <input
@@ -104,44 +104,23 @@ export default function SignUp() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Confirm Password
-              </label>
-              {/* <div className="text-sm">
-                <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                  Forgot password?
-                </a>
-              </div> */}
-            </div>
-            <div className="mt-2">
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                autoComplete="current-password"
-                onChange={handleChange}
-                required
-                className="block w-full bg-white/5 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-800 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div>
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-gray-900 hover:bg-gray-700 px-3 py-1.5 text-sm font-semibold leading-6 text-gray-50 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-50"
             >
-              Create Account
+              Sign in
             </button>
+            <Link
+              to="/"
+              className="mt-2 flex w-full justify-center rounded-md bg-amber-600 hover:bg-amber-500 px-3 py-1.5 text-sm font-semibold leading-6 text-gray-50 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+            >
+              Back to Home
+            </Link>
           </div>
         </form>
         {error && (
-          <div className="my-4 bg-red-200 rounded-md border-0 py-3.5 px-2">
-            <p className="text-red-500 text-center font-semibold">
+          <div className="my-4 bg-red-200 rounded-md border-0 py-3.5">
+            <p className="text-red-500 font-semibold text-center">
               {error.message}
             </p>
           </div>

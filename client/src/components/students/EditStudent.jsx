@@ -1,17 +1,18 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaSave } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { useMutation } from "@apollo/client";
-import { GET_STUDENT, GET_STUDENTS } from "../utils/queries";
-import { UPDATE_STUDENT } from "../utils/mutations";
+import { GET_STUDENT, GET_STUDENTS } from "../../utils/queries";
+import { UPDATE_STUDENT } from "../../utils/mutations";
 
-EditSingleStudent.propTypes = {
+EditStudent.propTypes = {
   student: PropTypes.object,
   onSubmit: PropTypes.func,
 };
 
-export default function EditSingleStudent(props) {
+export default function EditStudent(props) {
   const student = props.student;
   // add onSubmit prop to handle saving the form
   const onSubmit = props.onSubmit;
