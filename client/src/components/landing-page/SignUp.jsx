@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { REGISTER_USER } from "../utils/mutations";
+import { REGISTER_USER } from "../../utils/mutations";
 
-import p_logo_dark from "../assets/p_logo_dark.svg";
+import p_logo_dark from "../../assets/p_logo_dark.svg";
 
-import Auth from "../utils/auth";
+import Auth from "../../utils/auth";
 
-export default function SignUpComponent() {
+export default function SignUp() {
   const [formState, setFormState] = useState({
     email: "",
     password: "",

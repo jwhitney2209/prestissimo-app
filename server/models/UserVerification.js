@@ -16,7 +16,7 @@ const userVerificationSchema = new mongoose.Schema({
   },
   expiresAt: {
     type: Date,
-    default: () => Date.now() + 3600*500, // 3600 seconds from now
+    default: () => Date.now() + 3600*1000, // 3600 seconds from now
     index: { expires: '1h' }, // MongoDB TTL index for 1 hour
   },
 });

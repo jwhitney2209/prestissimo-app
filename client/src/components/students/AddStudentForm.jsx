@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
-import { ADD_STUDENT } from "../utils/mutations";
-import { GET_STUDENTS } from "../utils/queries";
+import { ADD_STUDENT } from "../../utils/mutations";
+import { GET_STUDENTS } from "../../utils/queries";
 
 const initialState = {
   firstName: "",
@@ -11,9 +11,24 @@ const initialState = {
   phone: "",
   grade: "",
   instrument: "",
-}
+};
 
-export default function AddStudent() {
+const instruments = [
+  "Soprano",
+  "Alto",
+  "Tenor",
+  "Bass",
+  "Soprano 1",
+  "Soprano 2",
+  "Alto 1",
+  "Alto 2",
+  "Tenor 1",
+  "Tenor 2",
+  "Bass 1",
+  "Bass 2",
+];
+
+export default function AddStudentForm() {
   const navigate = useNavigate();
   const [formState, setFormState] = useState({
     firstName: "",
@@ -42,22 +57,24 @@ export default function AddStudent() {
     try {
       const response = await addStudent({
         variables: {
-          firstName: formState.firstName,
-          lastName: formState.lastName,
-          email: formState.email,
-          phone: formState.phone,
-          grade: formState.grade,
-          instrument: formState.instrument,
+          input: {
+            firstName: formState.firstName,
+            lastName: formState.lastName,
+            email: formState.email,
+            phone: formState.phone,
+            grade: formState.grade,
+            instrument: formState.instrument,
+          },
         },
-      })
+      });
       if (response.data) {
         setFormState(initialState);
       }
     } catch {
-      console.log("Error adding student: ", error)
+      console.log("Error adding student: ", error);
     }
 
-    navigate("/students");
+    navigate("/dashboard/students");
   };
 
   return (
@@ -69,7 +86,7 @@ export default function AddStudent() {
               New Student
             </h2>
             <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
-              Use a permanent address where you can receive mail.
+              Please fill out the form below to add a new student.
             </p>
 
             <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
@@ -78,7 +95,7 @@ export default function AddStudent() {
                   htmlFor="firstName"
                   className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
                 >
-                  First name
+                  First name <span className="text-red-500">*</span>
                 </label>
                 <div className="mt-2 sm:col-span-2 sm:mt-0">
                   <input
@@ -98,7 +115,7 @@ export default function AddStudent() {
                   htmlFor="lastName"
                   className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
                 >
-                  Last name
+                  Last name <span className="text-red-500">*</span>
                 </label>
                 <div className="mt-2 sm:col-span-2 sm:mt-0">
                   <input
@@ -171,12 +188,34 @@ export default function AddStudent() {
                   />
                 </div>
               </div>
+              <div className="sm:grid sm:grid-cols-6 sm:items-start sm:gap-4 sm:py-6">
+                <label
+                  htmlFor="instrument"
+                  className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+                >
+                  Instrument / Voice Part
+                </label>
+                <div className="mt-2 sm:col-span-2 sm:mt-0">
+                  <select
+                    id="instrument"
+                    name="instrument"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:max-w-xs sm:text-sm sm:leading-6"
+                    onChange={handleInputChange}
+                    value={formState.instrument}
+                  >
+                    <option disabled>Select One</option>
+                    {instruments.map((instrument) => (
+                      <option key={instrument}>{instrument}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <Link
-            to="/"
+            to="/dashboard/students"
             type="button"
             className="text-sm font-semibold leading-6 text-gray-900"
           >

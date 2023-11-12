@@ -1,6 +1,6 @@
 import { InformationCircleIcon, BoltIcon } from "@heroicons/react/20/solid";
 
-import SectionTitle from "./SectionTitle";
+import SectionTitle from "../SectionTitle";
 
 export default function Announcements() {
   return (

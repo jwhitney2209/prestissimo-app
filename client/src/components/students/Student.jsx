@@ -1,40 +1,32 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_STUDENT } from "../utils/queries";
+import { GET_STUDENT } from "../../utils/queries";
 import { FaEdit } from "react-icons/fa";
 
-import EditSingleStudent from "../components/EditSingleStudent";
-import DeleteStudentButton from "../components/DeleteStudentButton";
-import Spinner from "../components/Spinner";
+import EditSingleStudent from "./EditStudent";
+import DeleteStudentButton from "./DeleteStudentButton";
+import Spinner from "../Spinner";
 
-export default function SingleStudent() {
-  // use the id parameter from the route to query the database for a single student
+export default function Student() {
   const { id } = useParams();
   const { loading, error, data } = useQuery(GET_STUDENT, {
     variables: { studentId: id },
   });
 
-
-  // memoize the student data so it doesn't get overwritten when the page title is set
   const student = useMemo(() => data?.getStudent || {}, [data]);
 
-  // set the page title to the student's name
   useEffect(() => {
     const originalTitle = document.title;
 
-    // if the student data is loaded, set the page title to the student's name
     if (!loading && student) {
       document.title = `${originalTitle} | ${student.firstName} ${student.lastName}`;
     }
 
-    // reset the page title when the component unmounts
     return () => {
       document.title = originalTitle;
     };
   }, [loading, student]);
-
-  // state hooks for managing input box visibility
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEdit = () => {
@@ -69,7 +61,7 @@ export default function SingleStudent() {
                 </div>
                 <div className="mt-3 sm:ml-4 sm:mt-0">
                   <Link
-                    to="/students"
+                    to="/dashboard/students"
                     type="button"
                     className="inline-flex items-center rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
                   >
@@ -125,27 +117,13 @@ export default function SingleStudent() {
                     </dt>
                     <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                       <span className="flex-grow">
-                        {student.section
-                          ? student.section.name
+                        {student.instrument
+                          ? student.instrument
                           : "No section assigned"}
                       </span>
                     </dd>
                   </div>
-                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                    <dt className="text-sm font-medium leading-6 text-gray-900">
-                      Ensembles
-                    </dt>
-                    <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                      <span className="flex-grow">
-                        {/* if there are ensembles in the array, map through them and display all */}
-                        {student.ensembles.length
-                          ? student.ensembles.map((ensemble) => (
-                              <span key={ensemble.id}>{ensemble.name}</span>
-                            ))
-                          : "No ensembles assigned"}
-                      </span>
-                    </dd>
-                  </div>
+
                   <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                     <dt className="text-sm font-medium leading-6 text-gray-900">
                       Uniforms

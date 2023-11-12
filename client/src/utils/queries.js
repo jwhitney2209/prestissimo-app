@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 const GET_STUDENTS = gql`
-query students {
-  students {
+query getStudents {
+  getStudents {
     id
     firstName
     lastName
@@ -17,27 +17,30 @@ query students {
 `;
 
 const GET_STUDENT = gql`
-  query GetStudent($studentId: ID!) {
-    getStudent(studentId: $studentId) {
+query getStudent($studentId: ID!) {
+  getStudent(studentId: $studentId) {
+    id
+    firstName
+    lastName
+    email
+    phone
+    grade
+    instrument
+    createdAt
+    classes {
       id
-      firstName
-      lastName
-      email
-      phone
-      uniforms {
-        name
-        size
-      }
-      ensembles {
-        name
-      }
-      accountBalance
-      grade
-      section {
-        name
-      }
+      name
+    }
+    uniforms {
+      id
+      name
+      quantity
+      size
+      condition
+      createdAt
     }
   }
+}
 `;
 
 const GET_UNIFORMS = gql`

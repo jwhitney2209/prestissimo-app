@@ -1,64 +1,52 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaSave } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { useMutation } from "@apollo/client";
-import { GET_STUDENT, GET_STUDENTS } from "../utils/queries";
-import { UPDATE_STUDENT } from "../utils/mutations";
+import { GET_STUDENT, GET_STUDENTS } from "../../utils/queries";
+import { UPDATE_STUDENT } from "../../utils/mutations";
 
-EditSingleStudent.propTypes = {
+EditStudent.propTypes = {
   student: PropTypes.object,
   onSubmit: PropTypes.func,
 };
 
-export default function EditSingleStudent(props) {
+export default function EditStudent(props) {
   const student = props.student;
   // add onSubmit prop to handle saving the form
   const onSubmit = props.onSubmit;
 
-  const [firstNameInput, setFirstNameInput] = useState("");
-  const [lastNameInput, setLastNameInput] = useState("");
-  const [emailInput, setEmailInput] = useState("");
-  const [phoneInput, setPhoneInput] = useState("");
-  const [gradeInput, setGradeInput] = useState("");
-
-  const [updateStudent] = useMutation(UPDATE_STUDENT, {
-    variables: {
-      studentId: student.id,
-      firstName: firstNameInput,
-      lastName: lastNameInput,
-      email: emailInput,
-      phone: phoneInput,
-      grade: gradeInput,
-    },
-    refetchQueries: [
-      { query: GET_STUDENT, variables: { studentId: student.id } },
-      { query: GET_STUDENTS },
-    ],
+  const [studentData, setStudentData] = useState({
+    firstName: student.firstName,
+    lastName: student.lastName,
+    email: student.email,
+    phone: student.phone,
+    grade: student.grade,
+    instrument: student.instrument,
   });
 
-  useEffect(() => {
-    setFirstNameInput(`${student.firstName}`);
-    setLastNameInput(`${student.lastName}`);
-    setEmailInput(`${student.email}`);
-    setPhoneInput(`${student.phone}`);
-    setGradeInput(`${student.grade}`);
-  }, [student.firstName, student.lastName, student.email, student.phone, student.grade]);
+  const [updateStudent] = useMutation(UPDATE_STUDENT);
 
-  const handleSubmit = () => {
-    updateStudent({
-      variables: {
-        studentId: student.id,
-        firstName: firstNameInput,
-        lastName: lastNameInput,
-        email: emailInput,
-        phone: phoneInput,
-        grade: gradeInput,
-      },
-    });
-    onSubmit();
+  const handleInputChange = (e) => {
+    setStudentData({ ...studentData, [e.target.name]: e.target.value });
   };
-  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await updateStudent({
+        variables: {
+          studentId: student.id,
+          input: studentData,
+        },
+      });
+      onSubmit();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <div className="px-4 sm:px-0 sm:flex sm:items-center sm:justify-between">
@@ -72,7 +60,7 @@ export default function EditSingleStudent(props) {
         </div>
         <div className="mt-3 sm:ml-4 sm:mt-0">
           <Link
-            to="/students"
+            to="students"
             type="button"
             className="inline-flex items-center rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
           >
@@ -93,9 +81,8 @@ export default function EditSingleStudent(props) {
                   type="text"
                   name="firstName"
                   id="firstName"
-                  value={firstNameInput}
-                  onChange={(event) => setFirstNameInput(event.target.value)}
-                />
+                  value={studentData.firstName}
+                  onChange={handleInputChange}                />
               </span>
             </dd>
           </div>
@@ -110,8 +97,8 @@ export default function EditSingleStudent(props) {
                   type="text"
                   name="lastName"
                   id="lastName"
-                  value={lastNameInput}
-                  onChange={(event) => setLastNameInput(event.target.value)}
+                  value={studentData.lastName}
+                  onChange={handleInputChange} 
                 />
               </span>
             </dd>
@@ -127,8 +114,8 @@ export default function EditSingleStudent(props) {
                   type="text"
                   name="email"
                   id="email"
-                  value={emailInput}
-                  onChange={(event) => setEmailInput(event.target.value)}
+                  value={studentData.email}
+                  onChange={handleInputChange}
                 />
               </span>
             </dd>
@@ -144,8 +131,8 @@ export default function EditSingleStudent(props) {
                   type="text"
                   name="phone"
                   id="phone"
-                  value={phoneInput}
-                  onChange={(event) => setPhoneInput(event.target.value)}
+                  value={studentData.phone}
+                  onChange={handleInputChange}
                 />
               </span>
             </dd>
@@ -161,8 +148,8 @@ export default function EditSingleStudent(props) {
                   type="text"
                   name="phone"
                   id="phone"
-                  value={gradeInput}
-                  onChange={(event) => setGradeInput(event.target.value)}
+                  value={studentData.grade}
+                  onChange={handleInputChange}
                 />
               </span>
             </dd>
@@ -173,22 +160,7 @@ export default function EditSingleStudent(props) {
             </dt>
             <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
               <span className="flex-grow">
-                {student.section ? student.section.name : "No section assigned"}
-              </span>
-            </dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
-              Ensembles
-            </dt>
-            <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              <span className="flex-grow">
-                {/* if there are ensembles in the array, map through them and display all */}
-                {student.ensembles.length
-                  ? student.ensembles.map((ensemble) => (
-                      <span key={ensemble.id}>{ensemble.name}</span>
-                    ))
-                  : "No ensembles assigned"}
+                {student.instrument ? student.instrument : "No section assigned"}
               </span>
             </dd>
           </div>

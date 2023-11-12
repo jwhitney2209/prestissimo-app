@@ -2,9 +2,9 @@
 
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_STUDENTS } from "../utils/queries";
+import { GET_STUDENTS } from "../../utils/queries";
 
-import Spinner from "./Spinner";
+import Spinner from "../Spinner";
 
 export default function StudentTable() {
   const { loading, error, data } = useQuery(GET_STUDENTS);
@@ -77,7 +77,7 @@ export default function StudentTable() {
                       </td>
                       <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                         <Link
-                          to={`/students/${student.id}`}
+                          to={`${student.id}`}
                           className="text-white rounded-md bg-gray-800 px-4 py-2 hover:bg-gray-700"
                         >
                           Edit<span className="sr-only">, {student.name}</span>

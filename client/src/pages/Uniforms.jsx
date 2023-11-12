@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_UNIFORMS } from "../utils/queries";
 
 import Spinner from "../components/Spinner";
 import UniformTable from "../components/UniformTable";
 export default function Uniforms() {
+  useEffect(() => {
+    document.title = "Uniforms";
+  }, []);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const { loading, error, data } = useQuery(GET_UNIFORMS);

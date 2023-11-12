@@ -7,8 +7,6 @@ module.exports = {
   Query: {
     async getStudents(_, args, context) {
       const user = context.user;
-
-      
       if (!user) {
         throw new Error("You must be logged in to perform this action.");
       }
@@ -27,8 +25,6 @@ module.exports = {
     },
     async getStudent(_, { studentId }, context) {
       const user = context.user;
-
-      
       if (!user) {
         throw new Error("You must be logged in to perform this action.");
       }
@@ -38,7 +34,6 @@ module.exports = {
           .populate("classes")
           .populate("uniforms");
         if (student) {
-          console.log(student);
           return student;
         } else {
           throw new Error("Student not found");
