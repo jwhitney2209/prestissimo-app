@@ -59,19 +59,19 @@ export const VERIFY_USER = gql`
 `;
 
 export const ADD_STUDENT = gql`
-  mutation addStudent($input: AddStudentInput!) {
-    addStudent(input: $input) {
-      id
-      firstName
-      lastName
-      userId
-      grade
-      phone
-      email
-      createdAt
-      instrument
-    }
+mutation addStudent($input: AddStudentInput!) {
+  addStudent(input: $input) {
+    id
+    firstName
+    lastName
+    email
+    phone
+    grade
+    instrument
+    createdAt
+    userId
   }
+}
 `;
 
 export const DELETE_STUDENT = gql`

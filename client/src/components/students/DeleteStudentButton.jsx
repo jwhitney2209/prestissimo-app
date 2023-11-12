@@ -10,7 +10,7 @@ export default function DeleteStudentButton({ studentId }) {
 
   const [deleteStudent] = useMutation(DELETE_STUDENT, {
     variables: { studentId: studentId },
-    onCompleted: () => navigate('/students'),
+    onCompleted: () => navigate('/dashboard/students'),
     refetchQueries: [{ query: GET_STUDENTS }],
 
   });

@@ -26,7 +26,7 @@ const instruments = [
   "Tenor 2",
   "Bass 1",
   "Bass 2",
-]
+];
 
 export default function AddStudentForm() {
   const navigate = useNavigate();
@@ -57,12 +57,14 @@ export default function AddStudentForm() {
     try {
       const response = await addStudent({
         variables: {
-          firstName: formState.firstName,
-          lastName: formState.lastName,
-          email: formState.email,
-          phone: formState.phone,
-          grade: formState.grade,
-          instrument: formState.instrument,
+          input: {
+            firstName: formState.firstName,
+            lastName: formState.lastName,
+            email: formState.email,
+            phone: formState.phone,
+            grade: formState.grade,
+            instrument: formState.instrument,
+          },
         },
       });
       if (response.data) {
@@ -72,7 +74,7 @@ export default function AddStudentForm() {
       console.log("Error adding student: ", error);
     }
 
-    navigate("/students");
+    navigate("/dashboard/students");
   };
 
   return (
@@ -84,7 +86,7 @@ export default function AddStudentForm() {
               New Student
             </h2>
             <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
-              Hello a permanent address where you can receive mail.
+              Please fill out the form below to add a new student.
             </p>
 
             <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
@@ -93,7 +95,7 @@ export default function AddStudentForm() {
                   htmlFor="firstName"
                   className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
                 >
-                  First name
+                  First name <span className="text-red-500">*</span>
                 </label>
                 <div className="mt-2 sm:col-span-2 sm:mt-0">
                   <input
@@ -113,7 +115,7 @@ export default function AddStudentForm() {
                   htmlFor="lastName"
                   className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
                 >
-                  Last name
+                  Last name <span className="text-red-500">*</span>
                 </label>
                 <div className="mt-2 sm:col-span-2 sm:mt-0">
                   <input
@@ -194,20 +196,18 @@ export default function AddStudentForm() {
                   Instrument / Voice Part
                 </label>
                 <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <select
-                  id="instrument"
-                  name="instrument"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:max-w-xs sm:text-sm sm:leading-6"
-                  defaultValue="Select One"
-                  onChange={handleInputChange}
-                  value={formState.instrument}
-                >
-                  <option disabled>Select One</option>
-                  {instruments.map((instrument) => (
-                    <option key={instrument}>{instrument}</option>
-                  ))
-                  }
-                </select>
+                  <select
+                    id="instrument"
+                    name="instrument"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:max-w-xs sm:text-sm sm:leading-6"
+                    onChange={handleInputChange}
+                    value={formState.instrument}
+                  >
+                    <option disabled>Select One</option>
+                    {instruments.map((instrument) => (
+                      <option key={instrument}>{instrument}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
