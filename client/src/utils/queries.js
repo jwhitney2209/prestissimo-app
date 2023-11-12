@@ -14,11 +14,10 @@ query getStudents {
     createdAt
   }
 }
-
 `;
 
 const GET_STUDENT = gql`
-query GetStudent($studentId: ID!) {
+query getStudent($studentId: ID!) {
   getStudent(studentId: $studentId) {
     id
     firstName
