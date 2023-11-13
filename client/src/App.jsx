@@ -23,20 +23,6 @@ import Student from "./components/students/Student";
 import AddStudentForm from "./components/students/AddStudentForm";
 import UploadStudents from "./components/students/UploadStudents";
 
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        getUniformCategories: {
-          merge(existing, incoming) {
-            return incoming;
-          },
-        },
-      },
-    },
-  },
-});
-
 const httpLink = createUploadLink({
   // uri: `${import.meta.env.VITE_APP_API_URL}/graphql` || "http://localhost:3001/graphql",
   uri: "http://localhost:3001/graphql",
@@ -54,7 +40,7 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache,
+  cache: new InMemoryCache()
 });
 
 function App() {

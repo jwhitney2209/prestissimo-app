@@ -2,14 +2,15 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_STUDENT } from "../../utils/queries";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 import EditSingleStudent from "./EditStudent";
-import DeleteStudentButton from "./DeleteStudentButton";
 import Spinner from "../Spinner";
+import DeleteModal from "../DeleteModal";
 
 export default function Student() {
   const { id } = useParams();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { loading, error, data } = useQuery(GET_STUDENT, {
     variables: { studentId: id },
   });
@@ -150,7 +151,20 @@ export default function Student() {
                 </span>
                 Edit Student
               </button>
-              <DeleteStudentButton studentId={id} />
+              <div className="mt-2">
+                <button
+                  className="flex items-center rounded-md px-3 py-2 bg-red-500 hover:bg-red-600 text-white text-sm"
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  <FaTrash className="text-white mr-2" />
+                  <p>Delete Student</p>
+                </button>
+
+                {showDeleteModal && (
+                  <DeleteModal studentId={id} state={showDeleteModal} closeModal={() => setShowDeleteModal(false)}/>
+                )}
+              </div>
+              {/* <DeleteStudentButton studentId={id} /> */}
             </>
           )}
         </>

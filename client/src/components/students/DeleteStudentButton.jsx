@@ -12,7 +12,6 @@ export default function DeleteStudentButton({ studentId }) {
     variables: { studentId: studentId },
     onCompleted: () => navigate('/dashboard/students'),
     refetchQueries: [{ query: GET_STUDENTS }],
-
   });
   return (
     <>
