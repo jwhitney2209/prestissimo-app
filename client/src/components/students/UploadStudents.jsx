@@ -44,7 +44,7 @@ export default function UploadStudents() {
 
         await convertCSV({ variables: { url } });
 
-        navigate("/students");
+        navigate("/dashboard/students");
       } catch (error) {
         console.error("Error:", error);
         // Handle error appropriately in your app

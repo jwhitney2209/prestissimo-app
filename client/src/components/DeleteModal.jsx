@@ -1,6 +1,6 @@
-import { Fragment, useRef } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { Fragment, useRef } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { GET_STUDENTS } from "../utils/queries";
@@ -11,22 +11,30 @@ DeleteModal.propTypes = {
   studentId: PropTypes.string.isRequired,
   state: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
-}
+};
 
-export default function DeleteModal({studentId, state, closeModal}) {
+export default function DeleteModal({ studentId, state, closeModal }) {
   const navigate = useNavigate();
   // const [open, setOpen] = useState(true)
-  const cancelButtonRef = useRef(null)
+  const cancelButtonRef = useRef(null);
 
   const [deleteStudent] = useMutation(DELETE_STUDENT, {
     variables: { studentId },
-    onCompleted: () => {closeModal(); navigate('/dashboard/students');},
+    onCompleted: () => {
+      closeModal();
+      navigate("/dashboard/students");
+    },
     refetchQueries: [{ query: GET_STUDENTS }],
   });
 
   return (
     <Transition.Root show={state} as={Fragment}>
-      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={closeModal}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        initialFocus={cancelButtonRef}
+        onClose={closeModal}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -53,15 +61,22 @@ export default function DeleteModal({studentId, state, closeModal}) {
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div className="sm:flex sm:items-start">
                   <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
+                    <ExclamationTriangleIcon
+                      className="h-6 w-6 text-red-600"
+                      aria-hidden="true"
+                    />
                   </div>
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                    <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-base font-semibold leading-6 text-gray-900"
+                    >
                       Confirm Delete
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Are you sure you want to delete? This action cannot be undone.
+                        Are you sure you want to delete? This action cannot be
+                        undone.
                       </p>
                     </div>
                   </div>
@@ -89,5 +104,5 @@ export default function DeleteModal({studentId, state, closeModal}) {
         </div>
       </Dialog>
     </Transition.Root>
-  )
+  );
 }

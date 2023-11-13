@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 
+// USER mutations
 export const LOGIN_USER = gql`
 mutation loginUser($email: String!, $password: String!) {
   loginUser(email: $email, password: $password) {
@@ -58,6 +59,7 @@ export const VERIFY_USER = gql`
   }
 `;
 
+// STUDENT mutations
 export const ADD_STUDENT = gql`
 mutation addStudent($input: AddStudentInput!) {
   addStudent(input: $input) {
@@ -94,6 +96,7 @@ mutation updateStudent($studentId: ID!, $input: AddStudentInput!) {
 }
 `;
 
+// UNIFORM mutations
 export const ADD_UNIFORM = gql`
   mutation addUniform(
     $category: String!
@@ -147,7 +150,7 @@ export const DELETE_UNIFORM = gql`
     deleteUniform(uniformId: $uniformId)
   }
 `;
-
+// IMPORT mutations
 export const CONVERT_CSV_TO_JSON = gql`
   mutation convertCSV($url: String!) {
     convertCSV(url: $url)
