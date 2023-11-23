@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
 import Uniforms from "./pages/Uniforms";
 import AddUniform from "./pages/AddUniform";
+import Financials from "./pages/Financials";
 import AssignUniform from "./pages/AssignUniform";
 import Verify from "./pages/Verify";
 // Components Imports
@@ -22,20 +23,6 @@ import SignUp from "./components/landing-page/SignUp";
 import Student from "./components/students/Student";
 import AddStudentForm from "./components/students/AddStudentForm";
 import UploadStudents from "./components/students/UploadStudents";
-
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        getUniformCategories: {
-          merge(existing, incoming) {
-            return incoming;
-          },
-        },
-      },
-    },
-  },
-});
 
 const httpLink = createUploadLink({
   // uri: `${import.meta.env.VITE_APP_API_URL}/graphql` || "http://localhost:3001/graphql",
@@ -54,7 +41,7 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache,
+  cache: new InMemoryCache()
 });
 
 function App() {
@@ -82,7 +69,7 @@ function App() {
           <Route path="students/:id" element={<Student />} />
           <Route path="students/add" element={<AddStudentForm />} />
           <Route path="students/import" element={<UploadStudents />} />
-
+          <Route path="financials" element={<Financials />} />
           <Route path="add-uniform" element={<AddUniform />} />
           <Route path="assign-uniform/:id" element={<AssignUniform />} />
           <Route path="uniforms" element={<Uniforms />} />

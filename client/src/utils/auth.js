@@ -44,5 +44,5 @@ class AuthService {
     window.location.assign("/");
   }
 }
-// eslint-disable-next-line
+
 export default new AuthService();

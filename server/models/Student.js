@@ -34,6 +34,16 @@ const studentSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  accountBalance: {
+    type: Number,
+    default: 0,
+  },
+  payments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Payment",
+    }
+  ],
   classes: [
     {
       type: mongoose.Schema.Types.ObjectId,

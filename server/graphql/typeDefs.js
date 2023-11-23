@@ -36,6 +36,26 @@ module.exports = `#graphql
     uniforms: [Uniform!]
   }
 
+  type Payment {
+    id: ID!
+    userId: String
+    studentId: String!
+    amount: Float!
+    description: String!
+    date: String!
+  }
+
+  type Event {
+    id: ID!
+    userId: String
+    title: String!
+    date: String!
+    description: String
+    cost: Float!
+    participants: [Student!]
+    createdAt: String!
+  }
+
   type Class {
     id: ID!
     userId: String
@@ -129,6 +149,21 @@ module.exports = `#graphql
 
   input ClassInput {
     name: String!
+  }
+
+  input PaymentInput {
+    studentId: ID!
+    amount: Float!
+    description: String!
+    date: String!
+  }
+
+  input EventInput {
+    title: String!
+    date: String!
+    description: String
+    cost: Float!
+    participants: [ID!]
   }
 
   type AuthPayload {
