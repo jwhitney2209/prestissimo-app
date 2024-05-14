@@ -91,6 +91,8 @@ module.exports = `#graphql
     uniform(uniformId: ID!): Uniform
     getClass(classId: ID!): Class
     classes: [Class!]!
+    getEvents: [Event!]!
+    getEvent(eventId: ID!): Event
   }
 
   type Mutation {
@@ -113,6 +115,9 @@ module.exports = `#graphql
     updateStudent(studentId: ID!, input: AddStudentInput!): Student!
     createClass(input: ClassInput!): Class!
     createUniform(input: UniformInput!): Uniform!
+    addEvent(input: EventInput!): Event!
+    deleteEvent(eventId: ID!): String!
+    updateEvent(eventId: ID!, input: EventInput!): Event!
   }
 
   input AddressInput {
@@ -160,7 +165,7 @@ module.exports = `#graphql
 
   input EventInput {
     title: String!
-    date: String!
+    date: String
     description: String
     cost: Float!
     participants: [ID!]

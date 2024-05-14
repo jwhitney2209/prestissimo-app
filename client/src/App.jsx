@@ -13,7 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
 import Uniforms from "./pages/Uniforms";
 import AddUniform from "./pages/AddUniform";
-import Financials from "./pages/Financials";
+import Finances from "./pages/Financials";
 import AssignUniform from "./pages/AssignUniform";
 import Verify from "./pages/Verify";
 // Components Imports
@@ -69,7 +69,7 @@ function App() {
           <Route path="students/:id" element={<Student />} />
           <Route path="students/add" element={<AddStudentForm />} />
           <Route path="students/import" element={<UploadStudents />} />
-          <Route path="financials" element={<Financials />} />
+          <Route path="finances" element={<Finances />} />
           <Route path="add-uniform" element={<AddUniform />} />
           <Route path="assign-uniform/:id" element={<AssignUniform />} />
           <Route path="uniforms" element={<Uniforms />} />

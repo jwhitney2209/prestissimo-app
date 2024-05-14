@@ -31,6 +31,11 @@ const navigation = [
     href: "uniforms",
     icon: ArchiveBoxIcon,
   },
+  {
+    name: "Finances",
+    href: "finances",
+    icon: ArchiveBoxIcon,
+  }
 ];
 
 function classNames(...classes) {
