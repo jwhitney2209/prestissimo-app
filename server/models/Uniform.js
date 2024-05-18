@@ -25,16 +25,18 @@ const uniformSchema = new mongoose.Schema({
   },
   quantity: {
     type: Number,
-    default: 1,
+    required: true,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  assignedTo: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Student",
-  }
+  assignedTo: [
+    {
+      student: { type: mongoose.Schema.Types.ObjectId, ref: "Student" },
+      date_assigned: { type: Date, default: Date.now },
+    },
+  ],
 });
 
 const Uniform = mongoose.model("Uniform", uniformSchema);

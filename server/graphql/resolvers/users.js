@@ -8,6 +8,7 @@ const {
   validateLoginInput,
 } = require("../../utils/validators");
 const User = require("../../models/User");
+const Program = require("../../models/Program");
 const UserVerification = require("../../models/UserVerification");
 
 const { google } = require("googleapis");
@@ -78,26 +79,40 @@ const sendVerificationEmail = async (user, host, verificationToken) => {
 
 module.exports = {
   Query: {
-    async users() {
-      try {
-        const users = await User.find();
-        return users;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async user(_, { userId }) {
-      try {
-        const user = await User.findById(userId);
-        if (user) {
-          return user;
-        } else {
-          throw new Error("User not found");
-        }
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
+    // async users() {
+    //   try {
+    //     const users = await User.find();
+    //     return users;
+    //   } catch (err) {
+    //     throw new Error(err);
+    //   }
+    // },
+    // async user(_, { userId }) {
+    //   try {
+    //     const user = await User.findById(userId);
+    //     if (user) {
+    //       return user;
+    //     } else {
+    //       throw new Error("User not found");
+    //     }
+    //   } catch (err) {
+    //     throw new Error(err);
+    //   }
+    // },
+    // async currentUserProgram(_, __, context) {
+    //   const user = context.user
+    //   if (!user) {
+    //     throw new AuthenticationError("You must be logged in to view this page.");
+    //   }
+
+    //   const currentUser = await User.findById(user._id).populate("program");
+
+    //   if (!currentUser) {
+    //     throw new Error("User not found");
+    //   }
+
+    //   return currentUser.program;
+    // }
   },
   Mutation: {
     async loginUser(_, { email, password }) {
@@ -107,7 +122,7 @@ module.exports = {
         throw new GraphQLError("Errors", { errors });
       }
 
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email }).populate("program");
 
       if (!user) {
         errors.general = "Invalid credentials";
@@ -130,14 +145,31 @@ module.exports = {
       // Explicitly return the user data needed by the client
       return {
         token,
-        user: user,
-      };
+        user: {
+          id: user._id.toString(),
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role,
+          isVerified: user.isVerified,
+          program: user.program ? {
+            id: user.program._id.toString(),
+            name: user.program.name,
+            school: user.program.school,
+            // Add additional necessary program fields here
+          } : null,
+        },
+      }
     },
-    async createUser(_, args) {
+    async createUserAndProgram(_, args, context) {
       const {
         email,
         password,
         confirmPassword,
+        firstName,
+        lastName,
+        programName,
+        school
       } = args;
 
       const { valid, errors } = validateRegisterInput(
@@ -156,15 +188,33 @@ module.exports = {
         throw new GraphQLError("This email is already taken.");
       }
 
+      const newProgram = new Program({
+        name: programName,
+        school: school,
+        users: [],
+      });
+      await newProgram.save();
+
       // Create a new user instance with the hashed password
       const newUser = new User({
         email,
         password, // Password will be hashed by the pre-save middleware
+        firstName,
+        lastName,
+        role: 'admin', // default the creator as admin
+        program: newProgram._id,
         isVerified: false,
       });
+      await newUser.save();
 
-      const savedUser = await newUser.save();
-      
+      newUser.id = newUser._id.toString();
+      // add user to the program's user list
+      newProgram.users.push(newUser.id);
+      await newProgram.save();
+
+       // Retrieve the program with populated user data
+  const populatedProgram = await Program.findById(newProgram._id).populate('users');
+
       const verificationToken = uuidv4();
       const newUserVerification = new UserVerification({
         userId: newUser._id,
@@ -176,10 +226,31 @@ module.exports = {
       // Update the host with your frontend URL
       const host = "http://localhost:3000"
 
-      await sendVerificationEmail(savedUser, host, verificationToken);
+      await sendVerificationEmail(newUser, host, verificationToken);
 
       return {
-        user: savedUser,
+        user: {
+          id: newUser._id.toString(),
+          email: newUser.email,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          role: newUser.role,
+          isVerified: newUser.isVerified,
+        },
+        program: {
+          id: populatedProgram._id.toString(),
+          name: populatedProgram.name,
+          school: populatedProgram.school,
+          users: populatedProgram.users.map(user => ({
+            id: user._id.toString(),
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role,
+            isVerified: user.isVerified,
+          })),
+          students: [], // Assuming no students initially
+        }
       };
     },
     async verifyUser(_, { token }) {

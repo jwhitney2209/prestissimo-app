@@ -1,59 +1,59 @@
-const Uniform = require("../../models/Uniform");
-const { GraphQLError } = require("graphql");
-const { authMiddleware } = require("../../utils/check-auth");
+// const Uniform = require("../../models/Uniform");
+// const { GraphQLError } = require("graphql");
+// const { authMiddleware } = require("../../utils/check-auth");
 
-module.exports = {
-  Query: {
-    async uniforms(_, args, context) {
-      const user = context.user;
-      try {
-        const uniforms = await Uniform.find({ userId: user._id })
-          .sort({
-            createdAt: -1,
-          })
-          .populate("assignedTo");
-        return uniforms;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    async uniform(_, { uniformId }, context) {
-      try {
-        const uniform = await Uniform.findById(uniformId).populate(
-          "assignedTo"
-        );
+// module.exports = {
+//   Query: {
+//     async uniforms(_, args, context) {
+//       const user = context.user;
+//       try {
+//         const uniforms = await Uniform.find({ userId: user._id })
+//           .sort({
+//             createdAt: -1,
+//           })
+//           .populate("assignedTo");
+//         return uniforms;
+//       } catch (err) {
+//         throw new Error(err);
+//       }
+//     },
+//     async uniform(_, { uniformId }, context) {
+//       try {
+//         const uniform = await Uniform.findById(uniformId).populate(
+//           "assignedTo"
+//         );
 
-        return uniform;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-  },
+//         return uniform;
+//       } catch (err) {
+//         throw new Error(err);
+//       }
+//     },
+//   },
 
-  Mutation: {
-    async createUniform(
-      _,
-      { category, name, size, condition, quantity },
-      context
-    ) {
-      const user = context.user;
-      const uniforms = [];
+//   Mutation: {
+//     async createUniform(
+//       _,
+//       { category, name, size, condition, quantity },
+//       context
+//     ) {
+//       const user = context.user;
+//       const uniforms = [];
 
-      for (let i = 0; i < quantity; i++) {
-        uniforms.push({
-          category,
-          name,
-          size,
-          condition,
-          userId: user._id,
-          createdAt: new Date().toISOString(),
-        });
-      }
+//       for (let i = 0; i < quantity; i++) {
+//         uniforms.push({
+//           category,
+//           name,
+//           size,
+//           condition,
+//           userId: user._id,
+//           createdAt: new Date().toISOString(),
+//         });
+//       }
 
-      const insertedUniforms = await Uniform.insertMany(uniforms);
+//       const insertedUniforms = await Uniform.insertMany(uniforms);
 
-      return insertedUniforms;
-    },
+//       return insertedUniforms;
+//     },
     // async deleteUniform(_, { uniformId }, context) {
     //   // delete uniform by id without auth
     //   try {
@@ -79,5 +79,5 @@ module.exports = {
     //     throw new Error(err);
     //   }
     // },
-  },
-};
+//   },
+// };

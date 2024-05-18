@@ -1,178 +1,245 @@
 module.exports = `#graphql
-  type Address {
-    street: String
-    city: String
-    state: String
-    zip: String
-  }
+type Address {
+  street: String
+  city: String
+  state: String
+  zip: String
+}
 
-  type School {
-    schoolName: String
-    schoolAddress: Address
-  }
+# Program Type
+type Program {
+  id: ID!
+  name: String!
+  school: String!
+  address: Address
+  users: [User!]!
+  students: [Student!]!
+}
 
-  type User {
-    id: ID!
-    email: String!
-    firstName: String
-    lastName: String
-    school: School
-    address: Address
-    createdAt: String
-    isVerified: Boolean!
-  }
+type User {
+  id: ID!
+  email: String!
+  firstName: String
+  lastName: String
+  role: Role!
+  program: Program!
+  isVerified: Boolean!
+  createdAt: String
+}
 
-  type Student {
-    id: ID!
-    userId: String
-    firstName: String!
-    lastName: String!
-    email: String
-    phone: String
-    grade: String
-    createdAt: String!
-    instrument: String
-    classes: [Class!]
-    uniforms: [Uniform!]
-  }
+enum Role {
+  admin
+  staff
+  parent
+}
 
-  type Payment {
-    id: ID!
-    userId: String
-    studentId: String!
-    amount: Float!
-    description: String!
-    date: String!
-  }
+type Student {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  grade: Int!
+  program: Program!
+}
 
-  type Event {
-    id: ID!
-    userId: String
-    title: String!
-    date: String!
-    description: String
-    cost: Float!
-    participants: [Student!]
-    createdAt: String!
-  }
+type AuthPayload {
+  token: String!
+  user: User!
+  program: Program!
+}
 
-  type Class {
-    id: ID!
-    userId: String
-    name: String!
-    createdAt: String!
-  }
+type CreateUserAndProgramPayload {
+  user: User!
+  program: Program!
+}
 
-  type Uniform {
-    id: ID!
-    userId: String
-    category: String!
-    name: String!
-    size: String
-    condition: UniformCondition!
-    quantity: Int!
-    createdAt: String!
-    assignedTo: Student
-  }
+type Query {
+  program(id: ID!): Program
+}
 
-  enum UniformCondition {
-    NEW
-    USED
-    WORN
-    DAMAGED
-  }
+type Mutation {
+  convertCSV(url: String!): String
+  verifyUser(token: String!): AuthPayload
+  loginUser(email: String!, password: String!): AuthPayload
+  createUserAndProgram(email: String!, password: String!, confirmPassword: String!, firstName: String!, lastName: String!, programName: String!, school: String!): CreateUserAndProgramPayload
+}
+`
 
-  type Query {
-    users: [User!]!
-    user(userId: ID!): User!
-    getStudents: [Student!]!
-    getStudent(studentId: ID!): Student
-    uniforms: [Uniform!]!
-    uniform(uniformId: ID!): Uniform
-    getClass(classId: ID!): Class
-    classes: [Class!]!
-    getEvents: [Event!]!
-    getEvent(eventId: ID!): Event
-  }
+// module.exports = `#graphql
+//   type Address {
+//     street: String
+//     city: String
+//     state: String
+//     zip: String
+//   }
 
-  type Mutation {
-    # file upload
-    convertCSV(url: String!): String
-    # user mutations
-    createUser(
-      email: String!
-      password: String!
-      confirmPassword: String!
-      firstName: String
-      lastName: String
-      school: SchoolInput
-      address: AddressInput
-    ): AuthPayload
-    loginUser(email: String!, password: String!): AuthPayload
-    verifyUser(token: String!): AuthPayload
-    addStudent(input: AddStudentInput!): Student!
-    deleteStudent(studentId: ID!): String!
-    updateStudent(studentId: ID!, input: AddStudentInput!): Student!
-    createClass(input: ClassInput!): Class!
-    createUniform(input: UniformInput!): Uniform!
-    addEvent(input: EventInput!): Event!
-    deleteEvent(eventId: ID!): String!
-    updateEvent(eventId: ID!, input: EventInput!): Event!
-  }
+//   type School {
+//     schoolName: String
+//     schoolAddress: Address
+//   }
 
-  input AddressInput {
-    street: String
-    city: String
-    state: String
-    zip: String
-  }
+//   type User {
+//     id: ID!
+//     email: String!
+//     firstName: String
+//     lastName: String
+//     school: School
+//     address: Address
+//     createdAt: String
+//     isVerified: Boolean!
+//   }
 
-  input SchoolInput {
-    schoolName: String
-    schoolAddress: AddressInput
-  }
+//   type Student {
+//     id: ID!
+//     userId: String
+//     firstName: String!
+//     lastName: String!
+//     email: String
+//     phone: String
+//     grade: String
+//     createdAt: String!
+//     instrument: String
+//     classes: [Class!]
+//     uniforms: [Uniform!]
+//   }
 
-  input AddStudentInput {
-    firstName: String!
-    lastName: String!
-    email: String
-    phone: String
-    grade: String
-    instrument: String
-    classIds: [ID!]
-    uniformIds: [ID!]
-  }
+//   type Payment {
+//     id: ID!
+//     userId: String
+//     studentId: String!
+//     amount: Float!
+//     description: String!
+//     date: String!
+//   }
+
+//   type Event {
+//     id: ID!
+//     userId: String
+//     title: String!
+//     date: String!
+//     description: String
+//     cost: Float!
+//     participants: [Student!]
+//     createdAt: String!
+//   }
+
+//   type Class {
+//     id: ID!
+//     userId: String
+//     name: String!
+//     createdAt: String!
+//   }
+
+//   type Uniform {
+//     id: ID!
+//     userId: String
+//     category: String!
+//     name: String!
+//     size: String
+//     condition: UniformCondition!
+//     quantity: Int!
+//     createdAt: String!
+//     assignedTo: Student
+//   }
+
+//   enum UniformCondition {
+//     NEW
+//     USED
+//     WORN
+//     DAMAGED
+//   }
+
+//   type Query {
+//     users: [User!]!
+//     user(userId: ID!): User!
+//     getStudents: [Student!]!
+//     getStudent(studentId: ID!): Student
+//     uniforms: [Uniform!]!
+//     uniform(uniformId: ID!): Uniform
+//     getClass(classId: ID!): Class
+//     classes: [Class!]!
+//     getEvents: [Event!]!
+//     getEvent(eventId: ID!): Event
+//   }
+
+//   type Mutation {
+//     # file upload
+//     convertCSV(url: String!): String
+//     # user mutations
+//     createUser(
+//       email: String!
+//       password: String!
+//       confirmPassword: String!
+//       firstName: String
+//       lastName: String
+//       school: SchoolInput
+//       address: AddressInput
+//     ): AuthPayload
+//     loginUser(email: String!, password: String!): AuthPayload
+//     verifyUser(token: String!): AuthPayload
+//     addStudent(input: AddStudentInput!): Student!
+//     deleteStudent(studentId: ID!): String!
+//     updateStudent(studentId: ID!, input: AddStudentInput!): Student!
+//     createClass(input: ClassInput!): Class!
+//     createUniform(input: UniformInput!): Uniform!
+//     addEvent(input: EventInput!): Event!
+//     deleteEvent(eventId: ID!): String!
+//     updateEvent(eventId: ID!, input: EventInput!): Event!
+//   }
+
+//   input AddressInput {
+//     street: String
+//     city: String
+//     state: String
+//     zip: String
+//   }
+
+//   input SchoolInput {
+//     schoolName: String
+//     schoolAddress: AddressInput
+//   }
+
+//   input AddStudentInput {
+//     firstName: String!
+//     lastName: String!
+//     email: String
+//     phone: String
+//     grade: String
+//     instrument: String
+//     classIds: [ID!]
+//     uniformIds: [ID!]
+//   }
 
 
-  input UniformInput {
-    category: String!
-    name: String!
-    size: String
-    condition: UniformCondition!
-    quantity: Int
-  }
+//   input UniformInput {
+//     category: String!
+//     name: String!
+//     size: String
+//     condition: UniformCondition!
+//     quantity: Int
+//   }
 
-  input ClassInput {
-    name: String!
-  }
+//   input ClassInput {
+//     name: String!
+//   }
 
-  input PaymentInput {
-    studentId: ID!
-    amount: Float!
-    description: String!
-    date: String!
-  }
+//   input PaymentInput {
+//     studentId: ID!
+//     amount: Float!
+//     description: String!
+//     date: String!
+//   }
 
-  input EventInput {
-    title: String!
-    date: String
-    description: String
-    cost: Float!
-    participants: [ID!]
-  }
+//   input EventInput {
+//     title: String!
+//     date: String
+//     description: String
+//     cost: Float!
+//     participants: [ID!]
+//   }
 
-  type AuthPayload {
-    token: String!
-    user: User!
-  }
-`;
+//   type AuthPayload {
+//     token: String!
+//     user: User!
+//   }
+// `;
+// 0

@@ -6,29 +6,25 @@ const eventSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  title: {
+  eventName: {
     type: String,
     required: true,
-    trim: true,
   },
-  date: {
+  eventType: {
+    type: String,
+    required: true,
+  },
+  totalCost: {
+    type: Number,
+  },
+  eventDate: {
     type: Date,
   },
-  description: {
-    type: String,
-    trim: true,
+  profitSplit: {
+    vendorPercentage: { type: Number, default: 0},
+    studentPercentage: { type: Number, default: 0},
+    schoolPercentage: { type: Number, default: 0},
   },
-  cost: {
-    type: Number,
-    default: 0,
-    required: true,
-  },
-  participants: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Student",
-    }
-  ],
   createdAt: {
     type: Date,
     default: Date.now,
