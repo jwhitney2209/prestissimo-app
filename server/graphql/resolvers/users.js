@@ -9,6 +9,7 @@ const {
 } = require("../../utils/validators");
 const User = require("../../models/User");
 const Program = require("../../models/Program");
+const Invitation = require("../../models/Invitation");
 const UserVerification = require("../../models/UserVerification");
 
 const { google } = require("googleapis");
@@ -50,10 +51,10 @@ const setupTransporter = async () => {
     // TURN THIS OFF IF YOU ARE NOT USING A TRUSTED CERTIFICATE - ONLY IN DEVELOPMENT WITH TRUSTED SERVER
     tls: {
       rejectUnauthorized: false,
-    }
+    },
   });
 
-  return transporter
+  return transporter;
   // other transporter setup...
 };
 
@@ -77,6 +78,23 @@ const sendVerificationEmail = async (user, host, verificationToken) => {
   await transporter.sendMail(mailOptions);
 };
 
+const sendInvitationEmail = async (email, host, token) => {
+  let transporter = await setupTransporter();
+
+  const invitationUrl = `${host}/accept-invitation/${token}`;
+
+  let mailOptions = {
+    from: process.env.AUTH_EMAIL,
+    to: email,
+    subject: "You've been invited to join a program",
+    html: `<p>Hi,</p>
+    <p>You've been invited to join a program. Click the link below to accept the invitation:</p>
+    <a href="${invitationUrl}">${invitationUrl}</a>
+    <p>If you did not request this, please ignore this email.</p>`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
 module.exports = {
   Query: {
     // async users() {
@@ -104,13 +122,10 @@ module.exports = {
     //   if (!user) {
     //     throw new AuthenticationError("You must be logged in to view this page.");
     //   }
-
     //   const currentUser = await User.findById(user._id).populate("program");
-
     //   if (!currentUser) {
     //     throw new Error("User not found");
     //   }
-
     //   return currentUser.program;
     // }
   },
@@ -126,18 +141,24 @@ module.exports = {
 
       if (!user) {
         errors.general = "Invalid credentials";
-        throw new GraphQLError("We do not recognize that email/password.", { errors });
+        throw new GraphQLError("We do not recognize that email/password.", {
+          errors,
+        });
       }
 
       const match = await bcrypt.compare(password, user.password);
 
       if (!match) {
         errors.general = "Invalid credentials";
-        throw new GraphQLError("We do not recognize that email/password.", { errors });
+        throw new GraphQLError("We do not recognize that email/password.", {
+          errors,
+        });
       }
 
       if (!user.isVerified) {
-        throw new GraphQLError("Your email address has not been verified. Please check your email for a verification link.");
+        throw new GraphQLError(
+          "Your email address has not been verified. Please check your email for a verification link."
+        );
       }
 
       const token = signToken(user);
@@ -152,14 +173,16 @@ module.exports = {
           lastName: user.lastName,
           role: user.role,
           isVerified: user.isVerified,
-          program: user.program ? {
-            id: user.program._id.toString(),
-            name: user.program.name,
-            school: user.program.school,
-            // Add additional necessary program fields here
-          } : null,
+          program: user.program
+            ? {
+                id: user.program._id.toString(),
+                name: user.program.name,
+                school: user.program.school,
+                // Add additional necessary program fields here
+              }
+            : null,
         },
-      }
+      };
     },
     async createUserAndProgram(_, args, context) {
       const {
@@ -169,7 +192,7 @@ module.exports = {
         firstName,
         lastName,
         programName,
-        school
+        school,
       } = args;
 
       const { valid, errors } = validateRegisterInput(
@@ -201,7 +224,7 @@ module.exports = {
         password, // Password will be hashed by the pre-save middleware
         firstName,
         lastName,
-        role: 'admin', // default the creator as admin
+        role: "admin", // default the creator as admin
         program: newProgram._id,
         isVerified: false,
       });
@@ -212,8 +235,10 @@ module.exports = {
       newProgram.users.push(newUser.id);
       await newProgram.save();
 
-       // Retrieve the program with populated user data
-  const populatedProgram = await Program.findById(newProgram._id).populate('users');
+      // Retrieve the program with populated user data
+      const populatedProgram = await Program.findById(newProgram._id).populate(
+        "users"
+      );
 
       const verificationToken = uuidv4();
       const newUserVerification = new UserVerification({
@@ -224,7 +249,7 @@ module.exports = {
       await newUserVerification.save();
 
       // Update the host with your frontend URL
-      const host = "http://localhost:3000"
+      const host = "http://localhost:3000";
 
       await sendVerificationEmail(newUser, host, verificationToken);
 
@@ -241,7 +266,7 @@ module.exports = {
           id: populatedProgram._id.toString(),
           name: populatedProgram.name,
           school: populatedProgram.school,
-          users: populatedProgram.users.map(user => ({
+          users: populatedProgram.users.map((user) => ({
             id: user._id.toString(),
             email: user.email,
             firstName: user.firstName,
@@ -250,38 +275,42 @@ module.exports = {
             isVerified: user.isVerified,
           })),
           students: [], // Assuming no students initially
-        }
+        },
       };
     },
     async verifyUser(_, { token }) {
       // Find the user verification record by the token
       const userVerification = await UserVerification.findOne({ token });
       if (!userVerification) {
-        throw new Error('Invalid or expired verification token');
+        throw new Error("Invalid or expired verification token");
       }
-      
+
       // Optional: Check if the token has expired based on the createdAt and expiration logic
       const currentTime = Date.now();
-      if (currentTime > new Date(userVerification.createdAt).getTime() + userVerification.expiration) {
+      if (
+        currentTime >
+        new Date(userVerification.createdAt).getTime() +
+          userVerification.expiration
+      ) {
         // Handle expired token case
         await UserVerification.findByIdAndRemove(userVerification._id); // Cleanup expired token
-        throw new Error('Verification token has expired');
+        throw new Error("Verification token has expired");
       }
-      
+
       // Find the user by the id from the verification token
       const user = await User.findById(userVerification.userId);
       if (!user) {
-        throw new Error('User not found');
+        throw new Error("User not found");
       }
-      
+
       if (user.isVerified) {
-        throw new Error('User is already verified');
+        throw new Error("User is already verified");
       }
-      
+
       // Verify the user
       user.isVerified = true;
       await user.save();
-      
+
       // Cleanup the verification token as it's no longer needed
       await UserVerification.findByIdAndRemove(userVerification._id);
 
@@ -293,6 +322,40 @@ module.exports = {
         token: newToken,
         user: user,
       };
+    },
+    async sendInvitation(_, { email, programId }, context) {
+      try {
+        const program = await Program.findById(programId);
+        if (!program) {
+          return {
+            success: false,
+            message: "Program not found",
+            invitation: null,
+          };
+        }
+
+        const newInvitation = new Invitation({
+          email,
+          program: programId,
+          token: uuidv4(),
+          expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+        });
+
+        await newInvitation.save();
+
+        // Update the host with your frontend URL
+        const host = "http://localhost:3000";
+
+        await sendInvitationEmail(email, host, newInvitation.token);
+
+        return {
+          success: true,
+          message: "Invitation sent",
+          newInvitation,
+        };
+      } catch (error) {
+        return { success: false, message: error.message, invitation: null };
+      }
     },
   },
 };

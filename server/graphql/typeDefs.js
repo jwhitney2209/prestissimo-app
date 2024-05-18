@@ -41,6 +41,14 @@ type Student {
   program: Program!
 }
 
+type Invitation {
+  id: ID!
+  email: String!
+  program: Program!
+  token: String!
+  expires: String!
+}
+
 type AuthPayload {
   token: String!
   user: User!
@@ -57,10 +65,18 @@ type Query {
 }
 
 type Mutation {
+  # file upload
   convertCSV(url: String!): String
+  # user mutations
   verifyUser(token: String!): AuthPayload
+  sendInvitation(email: String!, programId: ID!): InvitationResponse
   loginUser(email: String!, password: String!): AuthPayload
-  createUserAndProgram(email: String!, password: String!, confirmPassword: String!, firstName: String!, lastName: String!, programName: String!, school: String!): CreateUserAndProgramPayload
+  createUserAndProgram(email: String!, password: String!, confirmPassword: String!, firstName: String!, lastName: String!, program: String!, school: String!): CreateUserAndProgramPayload
+}
+type InvitationResponse {
+  message: String!
+  success: Boolean!
+  invitation: Invitation
 }
 `
 
