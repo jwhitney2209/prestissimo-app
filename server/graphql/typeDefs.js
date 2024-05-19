@@ -69,7 +69,8 @@ type Mutation {
   convertCSV(url: String!): String
   # user mutations
   verifyUser(token: String!): AuthPayload
-  sendInvitation(email: String!, programId: ID!): InvitationResponse
+  sendInvitation(email: String!, programId: ID!, role: String!): InvitationResponse
+  registerUserWithToken(email: String!, password: String!, confirmPassword: String!, firstName: String!, lastName: String!, token: String!): AuthPayload
   loginUser(email: String!, password: String!): AuthPayload
   createUserAndProgram(email: String!, password: String!, confirmPassword: String!, firstName: String!, lastName: String!, program: String!, school: String!): CreateUserAndProgramPayload
 }
@@ -78,7 +79,7 @@ type InvitationResponse {
   success: Boolean!
   invitation: Invitation
 }
-`
+`;
 
 // module.exports = `#graphql
 //   type Address {
@@ -224,7 +225,6 @@ type InvitationResponse {
 //     classIds: [ID!]
 //     uniformIds: [ID!]
 //   }
-
 
 //   input UniformInput {
 //     category: String!

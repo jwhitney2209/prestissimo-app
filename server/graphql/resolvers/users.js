@@ -184,6 +184,11 @@ module.exports = {
         },
       };
     },
+    // createUserAndProgram will be called when a user creates a new account and program.
+    // The function will create a new Program document and a new User document in the database.
+    // The function will also create a new UserVerification document to store the verification token.
+    // The function will send an email to the user with a link to verify their email address.
+    // The user will provide the email, password, confirmPassword, firstName, lastName, programName, and school.
     async createUserAndProgram(_, args, context) {
       const {
         email,
@@ -278,6 +283,13 @@ module.exports = {
         },
       };
     },
+    // verifyUser will be called when a user clicks on the verification link sent to their email. 
+    // The function will verify the user and sign a new token for the user.
+    // The user will provide the verification token.
+    // The function will find the UserVerification record by the token,
+    // check if the token has expired, find the user by the id from the verification token,
+    // verify the user, cleanup the verification token, sign a new token for the now verified user,
+    // and return the AuthPayload with the new token and the verified user.
     async verifyUser(_, { token }) {
       // Find the user verification record by the token
       const userVerification = await UserVerification.findOne({ token });
@@ -323,7 +335,11 @@ module.exports = {
         user: user,
       };
     },
-    async sendInvitation(_, { email, programId }, context) {
+    // sendInvitation will be called when a user (admin) sends an invitation to another user to join the program. 
+    // The function will create a new Invitation document in the database and send an email to 
+    // the invited user with a link to accept the invitation. The admin will provide the email, 
+    // programId, and role of the invited user.
+    async sendInvitation(_, { email, programId, role }, context) {
       try {
         const program = await Program.findById(programId);
         if (!program) {
@@ -334,10 +350,12 @@ module.exports = {
           };
         }
 
+        const verificationToken = uuidv4();
         const newInvitation = new Invitation({
           email,
           program: programId,
-          token: uuidv4(),
+          token: verificationToken,
+          role,
           expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
         });
 
@@ -351,10 +369,56 @@ module.exports = {
         return {
           success: true,
           message: "Invitation sent",
-          newInvitation,
+          invitation: newInvitation,
         };
       } catch (error) {
         return { success: false, message: error.message, invitation: null };
+      }
+    },
+    // registerUserWithToken will be called when a user accepts an invitation to join a program.
+    // The function will validate the invitation token, check if the email is already registered,
+    // create a new user, and remove the invitation from the database. The user will provide the token, 
+    // email, password, firstName, and lastName.
+    async registerUserWithToken(
+      _,
+      { token, email, password, firstName, lastName }
+    ) {
+      try {
+        // Validate the invitation token
+        const invitation = await Invitation.findOne({ token });
+        if (!invitation || new Date() > invitation.expires) {
+          throw new Error("Invalid or expired invitation token");
+        }
+
+        // check if email is already registered
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+          throw new Error("Email already registered");
+        }
+
+        // create the user
+        const newUser = new User({
+          email,
+          password,
+          firstName,
+          lastName,
+          role: invitation.role,
+          program: invitation.program,
+          isVerified: true,
+        });
+
+        const savedUser = await newUser.save();
+
+        await Invitation.findByIdAndRemove(invitation._id);
+
+        const newToken = signToken(savedUser);
+
+        return {
+          token: newToken,
+          user: savedUser,
+        };
+      } catch (error) {
+        throw new Error(error.message);
       }
     },
   },

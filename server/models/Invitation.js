@@ -16,6 +16,10 @@ const invitationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    enum: ['admin', 'staff','parent'],
+  },
   expires: {
     type: Date,
     required: true,
