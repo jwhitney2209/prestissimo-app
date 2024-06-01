@@ -38,7 +38,11 @@ const programSchema = new mongoose.Schema({
   students: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Student",
-  }]
+  }],
+  parents: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Parent",
+  }],
 });
 
 const Program = mongoose.model("Program", programSchema);

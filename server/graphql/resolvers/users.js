@@ -283,7 +283,7 @@ module.exports = {
         },
       };
     },
-    // verifyUser will be called when a user clicks on the verification link sent to their email. 
+    // verifyUser will be called when a user clicks on the verification link sent to their email.
     // The function will verify the user and sign a new token for the user.
     // The user will provide the verification token.
     // The function will find the UserVerification record by the token,
@@ -335,9 +335,9 @@ module.exports = {
         user: user,
       };
     },
-    // sendInvitation will be called when a user (admin) sends an invitation to another user to join the program. 
-    // The function will create a new Invitation document in the database and send an email to 
-    // the invited user with a link to accept the invitation. The admin will provide the email, 
+    // sendInvitation will be called when a user (admin) sends an invitation to another user to join the program.
+    // The function will create a new Invitation document in the database and send an email to
+    // the invited user with a link to accept the invitation. The admin will provide the email,
     // programId, and role of the invited user.
     async sendInvitation(_, { email, programId, role }, context) {
       try {
@@ -377,7 +377,7 @@ module.exports = {
     },
     // registerUserWithToken will be called when a user accepts an invitation to join a program.
     // The function will validate the invitation token, check if the email is already registered,
-    // create a new user, and remove the invitation from the database. The user will provide the token, 
+    // create a new user, and remove the invitation from the database. The user will provide the token,
     // email, password, firstName, and lastName.
     async registerUserWithToken(
       _,
@@ -408,6 +408,14 @@ module.exports = {
         });
 
         const savedUser = await newUser.save();
+
+        // Update the program's user list
+        const program = await Program.findById(invitation.program);
+        if (!program) {
+          throw new Error("Program not found");
+        }
+        program.users.push(savedUser._id); // Add the new user's ID to the program's user list
+        await program.save();
 
         await Invitation.findByIdAndRemove(invitation._id);
 

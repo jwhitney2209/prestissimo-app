@@ -6,7 +6,8 @@ module.exports = {
       try {
         const program = await Program.findById(id)
           .populate("users")
-          .populate("students");
+          .populate("students")
+          .populate("parents");
         if (program) {
           return program;
         } else {
@@ -23,6 +24,9 @@ module.exports = {
     },
     async students(program) {
       return program.students
+    },
+    async parents(program) {
+      return program.parents
     },
   }
 };

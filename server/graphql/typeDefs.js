@@ -14,6 +14,7 @@ type Program {
   address: Address
   users: [User!]!
   students: [Student!]!
+  parents: [Parent!]!
 }
 
 type User {
@@ -37,8 +38,22 @@ type Student {
   id: ID!
   firstName: String!
   lastName: String!
+  accessId: String!
   grade: Int!
+  phone: String
+  email: String!
   program: Program!
+  parents: [Parent!]
+}
+
+type Parent {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  phone: String!
+  email: String!
+  program: Program!
+  students: [Student!]
 }
 
 type Invitation {
@@ -72,7 +87,7 @@ type Mutation {
   sendInvitation(email: String!, programId: ID!, role: String!): InvitationResponse
   registerUserWithToken(email: String!, password: String!, confirmPassword: String!, firstName: String!, lastName: String!, token: String!): AuthPayload
   loginUser(email: String!, password: String!): AuthPayload
-  createUserAndProgram(email: String!, password: String!, confirmPassword: String!, firstName: String!, lastName: String!, program: String!, school: String!): CreateUserAndProgramPayload
+  createUserAndProgram(email: String!, password: String!, confirmPassword: String!, firstName: String!, lastName: String!, programName: String!, school: String!): CreateUserAndProgramPayload
 }
 type InvitationResponse {
   message: String!

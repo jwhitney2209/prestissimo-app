@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const studentSchema = new mongoose.Schema({
+const parentSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
@@ -11,17 +11,9 @@ const studentSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  accessId: {
-    type: String,
-  },
-  grade: {
-    type: Number,
-    required: true,
-    min: 1,
-    max: 12,
-  },
   phone: {
     type: String,
+    required: true,
     trim: true,
   },
   email: {
@@ -31,16 +23,16 @@ const studentSchema = new mongoose.Schema({
     trim: true,
     match: [/.+@.+\..+/, "Must match an email address!"],
   },
+  students: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Student",
+  }],
   program: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Program",
   },
-  parents: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Parent",
-  }],
 });
 
-const Student = mongoose.model("Student", studentSchema);
+const Parent = mongoose.model("Parent", parentSchema);
 
-module.exports = Student;
+module.exports = Parent;
