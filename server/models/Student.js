@@ -11,25 +11,16 @@ const studentSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  accessId: {
-    type: String,
-  },
-  grade: {
-    type: Number,
-    required: true,
-    min: 1,
-    max: 12,
-  },
-  phone: {
-    type: String,
-    trim: true,
-  },
   email: {
     type: String,
     required: true,
     lowercase: true,
     trim: true,
     match: [/.+@.+\..+/, "Must match an email address!"],
+  },
+  phoneNumber: {
+    type: String,
+    trim: true,
   },
   program: {
     type: mongoose.Schema.Types.ObjectId,
@@ -38,6 +29,14 @@ const studentSchema = new mongoose.Schema({
   parents: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",
+  }],
+  payments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Payment",
+  }],
+  fundraiserProfits: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "FundraiserProfit",
   }],
 });
 

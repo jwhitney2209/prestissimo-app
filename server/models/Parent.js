@@ -11,7 +11,7 @@ const parentSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  phone: {
+  phoneNumber: {
     type: String,
     required: true,
     trim: true,

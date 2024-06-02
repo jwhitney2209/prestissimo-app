@@ -1,35 +1,24 @@
 const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema({
-  student: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Student",
-    required: true,
-  },
-  event: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Event",
-    required: true,
-  },
   amount: {
     type: Number,
     required: true,
   },
   date: {
     type: Date,
+    required: true,
     default: Date.now,
   },
-  method: {
-    type: String,
-    enum: ['cash', 'check', 'credit', 'debit', 'paypal', 'venmo', 'cashapp', 'other'],
-    required: true,
+  student: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Student",
   },
-  type: {
-    type: String, enum: ['payment', 'refund', 'fundraiser', 'trip', 'uniform', 'other']
-  },
-  notes: {
+  description: {
     type: String,
   },
+}, {
+  timestamps: true,
 });
 
 const Payment = mongoose.model("Payment", paymentSchema);

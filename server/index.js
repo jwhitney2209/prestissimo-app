@@ -5,8 +5,11 @@ const cors = require("cors");
 const multer = require("multer");
 const AWS = require("aws-sdk");
 
+const { processCSV } = require("./graphql/resolvers/uploads");
 const path = require("path");
 require("dotenv").config();
+
+const upload = multer({ dest: 'uploads/' });
 
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers");
@@ -46,25 +49,34 @@ const startApolloServer = async () => {
   app.use(express.json());
   app.use(cors());
 
-  const storage = multer.memoryStorage();
-  const upload = multer({ storage });
-
-  app.post("/upload", upload.single("file"), async (req, res) => {
-    const { originalname, buffer } = req.file;
-    const params = {
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: `csv/${originalname}`,
-      Body: buffer,
-    };
-
+  app.post('/upload-csv', upload.single('file'), async (req, res) => {
+    const filePath = req.file.path;
+    const programId = req.body.programId;
     try {
-      const uploaded = await s3.upload(params).promise();
-      res.status(200).json({ url: uploaded.Location });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error });
+      await processCSV(filePath, programId);
+      res.send('File processed successfully');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send(err.message);
     }
-  });
+  })
+
+  // app.post("/upload", upload.single("file"), async (req, res) => {
+  //   const { originalname, buffer } = req.file;
+  //   const params = {
+  //     Bucket: process.env.AWS_S3_BUCKET_NAME,
+  //     Key: `csv/${originalname}`,
+  //     Body: buffer,
+  //   };
+
+  //   try {
+  //     const uploaded = await s3.upload(params).promise();
+  //     res.status(200).json({ url: uploaded.Location });
+  //   } catch (error) {
+  //     console.log(error);
+  //     res.status(500).json({ error });
+  //   }
+  // });
 
   app.use(
     "/graphql",
