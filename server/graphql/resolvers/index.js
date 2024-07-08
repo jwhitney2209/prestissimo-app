@@ -5,6 +5,7 @@ const uniformResolvers = require("./uniforms");
 const uploadsResolvers = require("./uploads");
 const eventsResolvers = require("./events");
 const programsResolvers = require("./programs");
+const parentsResolvers = require("./parents");
 
 module.exports = {
   Query: {
@@ -14,6 +15,7 @@ module.exports = {
     ...uniformResolvers.Query,
     ...eventsResolvers.Query,
     ...programsResolvers.Query,
+    ...parentsResolvers.Query,
   },
   Mutation: {
     ...usersResolvers.Mutation,
@@ -22,6 +24,7 @@ module.exports = {
     ...uniformResolvers.Mutation,
     ...uploadsResolvers.Mutation,
     ...eventsResolvers.Mutation,
+    ...programsResolvers.Mutation,
   },
   Program: {
     ...programsResolvers.Program,

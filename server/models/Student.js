@@ -30,14 +30,10 @@ const studentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Parent",
   }],
-  payments: [{
+  financial: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Payment",
-  }],
-  fundraiserProfits: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "FundraiserProfit",
-  }],
+    ref: "Financial",
+  },
 });
 
 const Student = mongoose.model("Student", studentSchema);

@@ -6,7 +6,6 @@ type Address {
   zip: String
 }
 
-# Program Type
 type Program {
   id: ID!
   name: String!
@@ -17,7 +16,6 @@ type Program {
   parents: [Parent!]!
 }
 
-# Student Type
 type Student {
   id: ID!
   firstName: String!
@@ -26,9 +24,9 @@ type Student {
   phoneNumber: String
   program: Program!
   parents: [Parent!]!
+  financial: Financial
 }
 
-# Parent Type
 type Parent {
   id: ID!
   firstName: String!
@@ -36,6 +34,20 @@ type Parent {
   email: String!
   phoneNumber: String
   students: [Student!]!
+  program: Program!
+}
+
+type Financial {
+  id: ID!
+  balance: Float!
+  payments: [Payment!]!
+}
+
+type Payment { 
+  id: ID!
+  amount: Float!
+  date: String!
+  description: String
 }
 
 type User {
@@ -76,6 +88,7 @@ type CreateUserAndProgramPayload {
 
 type Query {
   program(id: ID!): Program
+  studentsByProgram(programId: ID!): [Student!]!
 }
 
 type Mutation {
@@ -87,10 +100,25 @@ type Mutation {
   registerUserWithToken(email: String!, password: String!, confirmPassword: String!, firstName: String!, lastName: String!, token: String!): AuthPayload
   loginUser(email: String!, password: String!): AuthPayload
   createUserAndProgram(email: String!, password: String!, confirmPassword: String!, firstName: String!, lastName: String!, programName: String!, school: String!): CreateUserAndProgramPayload
+  # student mutations
+  addStudent(firstName: String!, lastName: String!, email: String!, phoneNumber: String, programId: ID!, parentIds: [ID], financial: FinancialInput): Student
+  addPayment(studentId: ID!, amount: Float!, description: String): Financial
+
 }
 type InvitationResponse {
   message: String!
   success: Boolean!
   invitation: Invitation
 }
+
+input FinancialInput {
+  balance: Float!
+  payments: [PaymentInput!]
+}
+
+input PaymentInput {
+  amount: Float!
+  description: String
+}
+
 `;

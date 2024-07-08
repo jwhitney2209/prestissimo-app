@@ -6,7 +6,12 @@ module.exports = {
       try {
         const program = await Program.findById(id)
           .populate("users")
-          .populate("students")
+          .populate({
+            path: 'students',
+            populate: {
+              path: 'financial'
+            }
+          })
           .populate("parents");
         if (program) {
           return program;
